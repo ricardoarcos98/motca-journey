@@ -438,6 +438,7 @@ function RevealPathCard({ path, index }: { path: string; index: number }) {
 
 function DiagnosticForm() {
   const [done, setDone] = useState(false);
+  const [staticFallback, setStaticFallback] = useState(false);
   const [data, setData] = useState({
     name: "", phone: "", role: "", email: "",
     path: "",
@@ -468,8 +469,21 @@ function DiagnosticForm() {
     if (!data.path) return setError("Selecciona una vía de expansión.");
     if (!data.terrain) return setError("Selecciona un terreno.");
 
+    const isGitHubPages =
+      typeof window !== "undefined" && window.location.hostname.endsWith("github.io");
+
     setSubmitting(true);
     try {
+      if (isGitHubPages) {
+        window.localStorage.setItem(
+          "motca-diagnostic-draft",
+          JSON.stringify({ ...data, createdAt: new Date().toISOString() }),
+        );
+        setStaticFallback(true);
+        setDone(true);
+        return;
+      }
+
       await send({ data });
       setDone(true);
     } catch (err) {
@@ -504,9 +518,13 @@ function DiagnosticForm() {
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </motion.div>
-          <h3 className="mt-6 text-2xl md:text-3xl font-bold text-navy-deep">Ya estás en lista de espera</h3>
+          <h3 className="mt-6 text-2xl md:text-3xl font-bold text-navy-deep">
+            {staticFallback ? "Tu diagnóstico quedó preparado" : "Ya estás en lista de espera"}
+          </h3>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo.
+            {staticFallback
+              ? "GitHub Pages publica esta landing como sitio estático. Para dejar tus datos y avanzar, agenda una demo por WhatsApp y comparte tu diagnóstico."
+              : "Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo."}
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
@@ -515,7 +533,7 @@ function DiagnosticForm() {
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-navy/20 transition-colors hover:bg-navy-deep"
             >
-              Agendar una demo
+              {staticFallback ? "Enviar por WhatsApp" : "Agendar una demo"}
             </a>
             <a
               href="#top"
