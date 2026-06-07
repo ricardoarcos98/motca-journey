@@ -9,8 +9,8 @@ import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import { BackgroundBeams } from "@/components/ui/background-beams";
-import { Boxes } from "@/components/ui/background-boxes";
-import motcaMascot from "@/assets/motca-mascot.png";
+import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
+import { Vortex } from "@/components/ui/vortex";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -82,15 +82,9 @@ function Landing() {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       <div className="fixed inset-0 -z-50 overflow-hidden bg-background" aria-hidden="true">
-        <Boxes className="opacity-[0.14] dark:opacity-[0.24]" />
-        <img
-          src={motcaMascot}
-          alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-[0.08] saturate-125 dark:opacity-[0.06]"
-        />
-        <BackgroundBeams className="opacity-30 mix-blend-screen dark:opacity-50 [mask-image:linear-gradient(180deg,transparent_0%,black_12%,black_78%,transparent_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.18),transparent_46%),linear-gradient(180deg,oklch(1_0_0/0.88),oklch(0.985_0.01_240/0.84)_42%,oklch(0.985_0.01_240/0.92))] dark:bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.11),transparent_48%),radial-gradient(ellipse_at_bottom_right,oklch(0.62_0.2_250/0.16),transparent_55%),linear-gradient(180deg,oklch(0.09_0.035_260/0.9),oklch(0.13_0.045_255/0.88)_42%,oklch(0.08_0.028_255/0.94))]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_18%,var(--background)_92%)] opacity-45 dark:opacity-35" />
+        <BackgroundBeams className="opacity-60 mix-blend-multiply dark:opacity-50 dark:mix-blend-screen [mask-image:linear-gradient(180deg,transparent_0%,black_8%,black_86%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.18),transparent_42%),radial-gradient(ellipse_at_top_right,oklch(0.62_0.2_250/0.16),transparent_48%),linear-gradient(180deg,oklch(1_0_0/0.76),oklch(0.985_0.01_240/0.82)_42%,oklch(0.985_0.01_240/0.92))] dark:bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.11),transparent_48%),radial-gradient(ellipse_at_bottom_right,oklch(0.62_0.2_250/0.16),transparent_55%),linear-gradient(180deg,oklch(0.09_0.035_260/0.9),oklch(0.13_0.045_255/0.88)_42%,oklch(0.08_0.028_255/0.94))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_16%,var(--background)_96%)] opacity-25 dark:opacity-35" />
       </div>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -164,7 +158,12 @@ function Landing() {
               </span>
               <h1 className="mt-5 text-4xl md:text-5xl xl:text-6xl font-bold text-navy-deep leading-[1.05]">
                 Aprende a pensar <span className="text-electric">con la tecnología</span>, no a depender de ella.
-                <span className="block text-motca-green mt-2">Eso es MOTCA.</span>
+                <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-motca-green">
+                  <span>Eso es</span>
+                  <LayoutTextFlip
+                    words={["MOTCA", "soñadores", "transformadores", "innovadores"]}
+                  />
+                </span>
               </h1>
               <p className="mt-6 text-lg text-muted-foreground max-w-xl">
                 Un modelo estructural que desarrolla en ti la capacidad de entender, dirigir y adaptarte a cualquier entorno tecnológico, sin importar qué herramienta cambie mañana.
@@ -711,37 +710,33 @@ function FuturisticLandscapePanel() {
     <aside
       className="relative z-20 hidden min-h-[34rem] overflow-hidden bg-[#06090d] text-white lg:block"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_34%,oklch(0.74_0.18_155/0.18),transparent_28%),radial-gradient(ellipse_at_35%_72%,oklch(0.62_0.2_250/0.28),transparent_42%),linear-gradient(180deg,oklch(0.1_0.05_250),oklch(0.05_0.03_260))]" />
-      <Boxes
-        className="left-[38%] top-[34%] z-10 opacity-[0.55]"
-        rows={54}
-        cols={44}
-        colors={["#38bdf8", "#22c55e", "#14b8a6", "#818cf8", "#a7f3d0"]}
-        lineClassName="border-cyan-200/16"
+      <Vortex
+        particleCount={980}
+        rangeY={520}
+        baseHue={190}
+        rangeSpeed={1.18}
+        baseRadius={0.7}
+        rangeRadius={1.7}
+        backgroundColor="#020617"
+        containerClassName="absolute inset-0 z-10"
       />
-      <BackgroundBeams className="z-10 opacity-[0.34] mix-blend-screen [mask-image:linear-gradient(90deg,black,black_84%,transparent)]" />
-      <div className="absolute inset-0 z-20 bg-[linear-gradient(90deg,oklch(0.06_0.03_260/0.76),transparent_34%,transparent_66%,oklch(0.06_0.03_260/0.72))]" />
-      <motion.div
-        className="absolute left-1/2 top-[62%] z-30 h-px w-[76%] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/85 to-transparent shadow-[0_0_34px_oklch(0.74_0.18_155/0.42)]"
-        initial={{ scaleX: 0.35, opacity: 0 }}
-        whileInView={{ scaleX: 1, opacity: 0.9 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-      />
-      <div className="absolute inset-x-0 top-0 z-40 flex h-[min(42rem,100vh)] items-center justify-center p-8">
+      <div className="absolute inset-0 z-20 bg-[#020617]/34" />
+      <div className="absolute inset-0 z-40 flex items-center justify-center p-8 text-center">
         <motion.div
           initial={{ opacity: 0, y: 18, scale: 0.98 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: "easeOut" }}
-          className="relative max-w-sm rounded-lg border border-white/14 bg-[#06111f]/68 px-8 py-7 text-center shadow-2xl shadow-black/35 backdrop-blur-md"
+          className="relative max-w-sm rounded-lg border border-white/10 bg-[#020617]/24 px-7 py-6 backdrop-blur-[2px]"
         >
-          <GlowingEffect spread={40} glow disabled={false} proximity={100} inactiveZone={0.01} borderWidth={1.2} />
-          <div className="mb-5 text-[0.68rem] font-mono font-semibold tracking-[0.42em] text-motca-green">
+          <div className="mb-4 text-[0.68rem] font-mono font-semibold tracking-[0.42em] text-motca-green">
             MOTCA
           </div>
-          <p className="font-display text-2xl font-semibold leading-tight text-white">
-            "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
+          <h3 className="font-display text-3xl font-bold leading-tight text-white md:text-4xl">
+            Diagnóstico de capacidad adaptativa
+          </h3>
+          <p className="mx-auto mt-4 max-w-xs text-sm leading-relaxed text-white/76">
+            Identifica cómo piensas, decides y te adaptas cuando la tecnología cambia.
           </p>
         </motion.div>
       </div>
