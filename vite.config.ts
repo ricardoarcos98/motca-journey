@@ -13,6 +13,12 @@ export default defineConfig({
     base: process.env.GITHUB_PAGES === "true" && repoName ? `/${repoName}/` : "/",
   },
   tanstackStart: {
+    prerender: {
+      enabled: true,
+      crawlLinks: true,
+      failOnError: true,
+    },
+    pages: [{ path: "/" }],
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
