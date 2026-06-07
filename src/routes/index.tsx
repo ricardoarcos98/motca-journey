@@ -155,8 +155,8 @@ function Landing() {
                 <a href="#form" className="px-6 py-3 rounded-lg bg-navy text-primary-foreground font-medium hover:bg-navy-deep transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-navy/20">
                   Solicitar diagnóstico
                 </a>
-                <a href="#architecture" className="px-6 py-3 rounded-lg border border-border bg-card text-navy font-medium hover:border-electric hover:text-electric transition-colors">
-                  Ver arquitectura
+                <a href="#model" className="px-6 py-3 rounded-lg border border-border bg-card text-navy font-medium hover:border-electric hover:text-electric transition-colors">
+                  Ver modelo
                 </a>
               </div>
             </motion.div>
@@ -173,24 +173,7 @@ function Landing() {
           </div>
       </section>
 
-      <SectionDivider variant="heroToArchitecture" />
-
-      {/* ARCHITECTURE */}
-      <section id="architecture" className="relative overflow-hidden py-16 md:py-20">
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,oklch(0.98_0.01_240/0.84)_0%,oklch(0.95_0.035_245/0.88)_100%)] backdrop-blur-[1px]" />
-          <div className="max-w-6xl mx-auto px-5">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7 }}
-            >
-              <LevelsDiagram active={activeNode} onHover={setActiveNode} />
-            </motion.div>
-          </div>
-      </section>
-
-      <SectionDivider variant="architectureToModel" />
+      <SectionDivider variant="heroToModel" />
 
       {/* MODEL NODES */}
       <Section id="model" eyebrow="El modelo" title="Cuatro nodos. Un centro cognitivo." tone="clean">
@@ -238,8 +221,9 @@ function Landing() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
-                  className="flex items-center gap-4 p-4 rounded-lg bg-card border border-border"
+                  className="relative flex items-center gap-4 overflow-hidden p-4 rounded-lg bg-card border border-border"
                 >
+                  <GlowingEffect spread={32} glow disabled={false} proximity={80} inactiveZone={0.01} borderWidth={1.2} />
                   <div className="w-10 h-10 rounded-md bg-gradient-to-br from-electric to-motca-green text-primary-foreground font-mono font-bold flex items-center justify-center">
                     {i + 1}
                   </div>
@@ -323,15 +307,13 @@ function Section({
 }
 
 function SectionDivider({
-  variant = "heroToArchitecture",
+  variant = "heroToModel",
 }: {
-  variant?: "heroToArchitecture" | "architectureToModel" | "modelToOrigin" | "originToPaths" | "pathsToForm";
+  variant?: "heroToModel" | "modelToOrigin" | "originToPaths" | "pathsToForm";
 }) {
   const accentClass = {
-    heroToArchitecture:
+    heroToModel:
       "from-electric/0 via-electric/70 to-electric/0",
-    architectureToModel:
-      "from-motca-green/0 via-motca-green/70 to-motca-green/0",
     modelToOrigin:
       "from-motca-green/0 via-motca-green/60 to-motca-green/0",
     originToPaths:
@@ -341,96 +323,16 @@ function SectionDivider({
   }[variant];
 
   return (
-    <div className="relative h-[3px] overflow-hidden bg-border/70" aria-hidden="true">
-      <motion.div
-        className={`absolute inset-y-0 left-1/2 w-[68vw] -translate-x-1/2 rounded-full bg-gradient-to-r ${accentClass}`}
-        initial={{ scaleX: 0, opacity: 0 }}
-        whileInView={{ scaleX: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.75, ease: "easeOut" }}
-      />
-    </div>
-  );
-}
-
-function LevelsDiagram({
-  active,
-  onHover,
-  compact = false,
-}: {
-  active: number;
-  onHover: (i: number) => void;
-  compact?: boolean;
-}) {
-  const nodeColumns = compact ? [nodes] : [nodes.slice(0, 2), nodes.slice(2)];
-
-  return (
-    <div data-motca-levels className="relative overflow-hidden p-6 md:p-8 rounded-2xl bg-card border border-border shadow-xl shadow-navy/5">
-      <GlowingEffect spread={46} glow disabled={false} proximity={120} inactiveZone={0.01} borderWidth={1.5} />
-      <div className="flex items-center justify-between mb-6">
-        <div className="text-[10px] font-mono font-semibold tracking-widest text-muted-foreground uppercase">
-          Arquitectura MOTCA
-        </div>
-        <div className="flex items-center gap-1.5">
-          <span className="w-2 h-2 rounded-full bg-motca-green animate-pulse" />
-          <span className="text-[10px] font-mono text-muted-foreground">activo</span>
-        </div>
-      </div>
-
-      <div className={`grid gap-5 relative ${compact ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2 md:gap-8"}`}>
-        {nodeColumns.map((column, columnIndex) => (
-          <div key={columnIndex === 0 ? "base" : "autonomy"} className="flex flex-col gap-4">
-            {column.map((node, itemIndex) => {
-              const i = compact ? itemIndex : columnIndex * 2 + itemIndex;
-              const isActive = active === i;
-              return (
-                <motion.div
-                  key={node.n}
-                  data-motca-node={node.n}
-                  onMouseEnter={() => onHover(i)}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
-                  className={`relative min-h-[142px] overflow-hidden p-5 rounded-lg border transition-all cursor-pointer ${
-                    isActive
-                      ? "border-electric bg-electric/5"
-                      : "border-border bg-background hover:border-electric/50"
-                  }`}
-                >
-                  <GlowingEffect spread={34} glow disabled={false} proximity={86} inactiveZone={0.01} borderWidth={1.2} />
-                  <div
-                    className={`w-10 h-10 rounded-md flex items-center justify-center font-mono font-bold text-sm transition-colors mb-4 ${
-                      isActive ? "bg-electric text-white" : "bg-muted text-navy-deep"
-                    }`}
-                  >
-                    {node.n}
-                  </div>
-                  <div className="font-display font-semibold text-navy-deep text-sm md:text-base">{node.title}</div>
-                  <div className="text-xs md:text-sm text-muted-foreground mt-1">{node.desc}</div>
-                  <div className="mt-4 h-1 rounded-full bg-muted overflow-hidden">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-electric to-motca-green"
-                      initial={{ width: "0%" }}
-                      animate={{ width: isActive ? "100%" : `${(i + 1) * 25}%` }}
-                      transition={{ duration: 0.8, ease: "easeOut" }}
-                    />
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        ))}
-        {!compact && (
-          <div className="hidden md:block absolute inset-y-0 left-1/2 w-[2px] -translate-x-1/2 rounded-full bg-gradient-to-b from-transparent via-electric/50 to-transparent" aria-hidden="true" />
-        )}
-      </div>
-
-      <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
-        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest">
-          Capacidad adaptativa
-        </span>
-        <span className="text-sm font-display font-bold text-motca-green">100%</span>
+    <div className="relative flex h-10 items-center justify-center overflow-hidden bg-white/40" aria-hidden="true">
+      <div className="relative h-4 w-[min(68rem,86vw)] rounded-full border border-white/70 bg-white/45 shadow-sm shadow-navy/5">
+        <GlowingEffect spread={44} glow disabled={false} proximity={96} inactiveZone={0.01} borderWidth={1.1} />
+        <motion.div
+          className={`absolute left-1/2 top-1/2 h-px w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r ${accentClass}`}
+          initial={{ scaleX: 0, opacity: 0 }}
+          whileInView={{ scaleX: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.75, ease: "easeOut" }}
+        />
       </div>
     </div>
   );
@@ -628,16 +530,17 @@ function DiagnosticForm() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-[#090b0f] shadow-2xl shadow-navy/20">
-      <BackgroundBeams className="opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_28%,transparent_74%)]" />
+    <div className="relative overflow-hidden rounded-2xl border border-white/75 bg-white/82 shadow-2xl shadow-navy/14 backdrop-blur-xl">
+      <GlowingEffect spread={58} glow disabled={false} proximity={140} inactiveZone={0.01} borderWidth={1.5} />
+      <BackgroundBeams className="opacity-20 mix-blend-screen [mask-image:radial-gradient(ellipse_at_center,black_24%,transparent_74%)]" />
       <div className="relative z-10 grid lg:grid-cols-[0.9fr_1.1fr]">
         <FuturisticQuotePanel />
 
-        <form onSubmit={submit} className="space-y-5 bg-[#090b0f] p-6 text-white md:p-9 lg:p-10">
+        <form onSubmit={submit} className="space-y-5 bg-white/88 p-6 text-navy-deep md:p-9 lg:p-10">
           <div className="mb-2">
             <div className="mb-5 font-display text-sm font-bold uppercase tracking-[0.28em] text-motca-green">MOTCA</div>
-            <div className="font-display text-3xl font-bold tracking-tight text-white">Solicita tu diagnóstico</div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/65">
+            <div className="font-display text-3xl font-bold tracking-tight text-navy-deep">Solicita tu diagnóstico</div>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
               Usamos estas respuestas para orientar el diagnóstico inicial y priorizar los pilotos adecuados.
             </p>
           </div>
@@ -704,15 +607,16 @@ function DiagnosticForm() {
             />
           </Field>
 
-          {error && <p className="text-sm font-medium text-red-200">{error}</p>}
+          {error && <p className="text-sm font-medium text-red-600">{error}</p>}
 
           <motion.button
             whileHover={{ y: submitting ? 0 : -2 }}
             whileTap={{ scale: submitting ? 1 : 0.98 }}
             type="submit"
             disabled={submitting}
-            className="w-full rounded-lg bg-white px-7 py-3.5 font-semibold text-navy-deep shadow-lg shadow-white/10 transition-colors hover:bg-motca-green disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+            className="relative w-full overflow-hidden rounded-lg bg-navy px-7 py-3.5 font-semibold text-white shadow-lg shadow-navy/15 transition-colors hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
           >
+            <GlowingEffect spread={30} glow disabled={false} proximity={72} inactiveZone={0.01} borderWidth={1.2} />
             {submitting ? "Enviando…" : "Enviar diagnóstico"}
           </motion.button>
         </form>
@@ -728,31 +632,44 @@ function FuturisticQuotePanel({ compact = false }: { compact?: boolean }) {
         compact ? "hidden min-h-[28rem] md:flex" : "min-h-[32rem]"
       }`}
     >
-      <div className="absolute inset-0 bg-[linear-gradient(135deg,oklch(0.2_0.07_260)_0%,oklch(0.18_0.08_248)_42%,oklch(0.12_0.03_250)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.74_0.18_155/0.18)_0_1px,transparent_1px_42px),linear-gradient(0deg,oklch(0.62_0.2_250/0.14)_0_1px,transparent_1px_42px)] opacity-45" />
-      <BackgroundBeams className="opacity-55 mix-blend-screen [mask-image:linear-gradient(90deg,black,black_72%,transparent)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,black/24_70%,black/48)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.78_0.13_225)_0%,oklch(0.55_0.18_245)_38%,oklch(0.2_0.08_255)_69%,oklch(0.08_0.03_250)_100%)]" />
+      <div className="absolute inset-x-0 top-0 h-1/2 bg-[radial-gradient(ellipse_at_50%_85%,oklch(0.74_0.18_155/0.55),transparent_42%),radial-gradient(ellipse_at_70%_30%,oklch(0.62_0.2_250/0.45),transparent_44%)]" />
+      <div
+        className="absolute inset-x-0 bottom-[25%] h-[34%] bg-[linear-gradient(135deg,oklch(0.18_0.08_255),oklch(0.35_0.14_238),oklch(0.22_0.12_158))] opacity-95"
+        style={{ clipPath: "polygon(0 72%, 11% 45%, 23% 67%, 36% 22%, 52% 58%, 64% 32%, 76% 62%, 90% 30%, 100% 58%, 100% 100%, 0 100%)" }}
+      />
+      <div
+        className="absolute inset-x-0 bottom-[16%] h-[30%] bg-[linear-gradient(135deg,oklch(0.12_0.05_260),oklch(0.24_0.1_245),oklch(0.14_0.06_160))] opacity-95"
+        style={{ clipPath: "polygon(0 80%, 13% 52%, 27% 72%, 43% 36%, 58% 74%, 72% 42%, 86% 64%, 100% 48%, 100% 100%, 0 100%)" }}
+      />
+      <div className="absolute inset-x-0 bottom-0 h-[43%] origin-bottom bg-[linear-gradient(90deg,oklch(0.74_0.18_155/0.18)_0_1px,transparent_1px_54px),linear-gradient(0deg,oklch(0.62_0.2_250/0.28)_0_1px,transparent_1px_32px)] [transform:perspective(520px)_rotateX(58deg)]" />
+      <BackgroundBeams className="opacity-42 mix-blend-screen [mask-image:linear-gradient(90deg,black,black_82%,transparent)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,black/5,transparent_38%,black/30_78%,black/52)]" />
       <div className="relative z-10 flex w-full flex-col items-center justify-center px-8 py-12 text-center md:px-10">
-        <div className="mb-8 font-display text-sm font-bold uppercase tracking-[0.32em] text-motca-green">
+        <div className="mb-8 font-display text-sm font-bold uppercase tracking-[0.32em] text-white">
           MOTCA
         </div>
-        <blockquote className="max-w-md font-display text-2xl font-semibold leading-tight md:text-3xl">
+        <blockquote className="relative max-w-md overflow-hidden rounded-xl border border-white/22 bg-navy-deep/42 px-6 py-6 font-display text-2xl font-semibold leading-tight text-white shadow-2xl shadow-navy/25 backdrop-blur-md md:text-3xl">
+          <GlowingEffect spread={36} glow disabled={false} proximity={90} inactiveZone={0.01} borderWidth={1.2} />
           "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
         </blockquote>
-        <div className="mt-8 h-px w-24 bg-gradient-to-r from-transparent via-motca-green to-transparent" />
+        <div className="mt-8 h-px w-24 bg-gradient-to-r from-transparent via-white to-transparent" />
       </div>
     </aside>
   );
 }
 
 const inputCls =
-  "w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition-all placeholder:text-white/40 focus:border-motca-green focus:ring-2 focus:ring-motca-green/20 [&>option]:bg-navy-deep [&>option]:text-white";
+  "relative z-10 w-full rounded-lg border border-border bg-white/78 px-4 py-3 text-navy-deep outline-none transition-all placeholder:text-muted-foreground focus:border-motca-green focus:bg-white focus:ring-2 focus:ring-motca-green/20 [&>option]:bg-white [&>option]:text-navy-deep";
 
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return (
     <label className={`block ${className}`}>
       <span className="mb-1.5 block text-sm font-medium text-current">{label}</span>
-      {children}
+      <span className="relative block rounded-lg">
+        <GlowingEffect spread={28} glow disabled={false} proximity={68} inactiveZone={0.01} borderWidth={1.1} />
+        {children}
+      </span>
     </label>
   );
 }
@@ -771,12 +688,13 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     <button
       type="button"
       onClick={onClick}
-      className={`px-4 py-2 rounded-md text-sm font-medium border transition-all ${
+      className={`relative overflow-hidden px-4 py-2 rounded-md text-sm font-medium border transition-all ${
         active
           ? "bg-motca-green text-navy-deep border-motca-green"
-          : "bg-white/10 text-white/85 border-white/15 hover:border-motca-green hover:bg-white/15"
+          : "bg-white/70 text-navy-deep border-border hover:border-motca-green hover:bg-white"
       }`}
     >
+      <GlowingEffect spread={24} glow disabled={false} proximity={56} inactiveZone={0.01} borderWidth={1} />
       {children}
     </button>
   );
