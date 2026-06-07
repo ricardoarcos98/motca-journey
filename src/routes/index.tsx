@@ -327,30 +327,28 @@ function SectionDivider({
 }: {
   variant?: "heroToArchitecture" | "architectureToModel" | "modelToOrigin" | "originToPaths" | "pathsToForm";
 }) {
-  const gradientClass = {
+  const accentClass = {
     heroToArchitecture:
-      "from-white via-electric/10 to-[oklch(0.95_0.035_245)]",
+      "from-electric/0 via-electric/70 to-electric/0",
     architectureToModel:
-      "from-[oklch(0.95_0.035_245)] via-motca-green/10 to-white",
+      "from-motca-green/0 via-motca-green/70 to-motca-green/0",
     modelToOrigin:
-      "from-white via-motca-green/12 to-[oklch(0.96_0.02_225)]",
+      "from-motca-green/0 via-motca-green/60 to-motca-green/0",
     originToPaths:
-      "from-[oklch(0.96_0.02_225)] via-electric/10 to-[oklch(0.96_0.028_245)]",
+      "from-electric/0 via-electric/65 to-electric/0",
     pathsToForm:
-      "from-[oklch(0.93_0.045_248)] via-motca-green/14 to-[oklch(0.98_0.01_235)]",
+      "from-motca-green/0 via-motca-green/70 to-motca-green/0",
   }[variant];
 
   return (
-    <div className={`relative h-14 overflow-hidden bg-gradient-to-b ${gradientClass}`} aria-hidden="true">
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
+    <div className="relative h-[3px] overflow-hidden bg-border/70" aria-hidden="true">
       <motion.div
-        className="absolute left-1/2 top-1/2 h-[2px] w-[76vw] -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-white/70 to-transparent"
+        className={`absolute inset-y-0 left-1/2 w-[68vw] -translate-x-1/2 rounded-full bg-gradient-to-r ${accentClass}`}
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 1 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
+        transition={{ duration: 0.75, ease: "easeOut" }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
     </div>
   );
 }
@@ -586,19 +584,7 @@ function DiagnosticForm() {
         className="relative grid h-auto min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5 md:grid-cols-[0.82fr_1.18fr]"
         svgOptions={{ duration: 8 }}
       >
-        <div className="relative z-20 hidden min-h-[28rem] overflow-hidden md:block">
-          <img
-            src={motcaMascot}
-            alt=""
-            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-75 blur-sm"
-          />
-          <img
-            src={motcaMascot}
-            alt="Mascota de MOTCA"
-            className="relative z-10 h-full w-full object-contain p-5 [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_78%)]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/70 via-navy-deep/5 to-transparent" />
-        </div>
+        <FuturisticQuotePanel compact />
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -645,41 +631,11 @@ function DiagnosticForm() {
     <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-[#090b0f] shadow-2xl shadow-navy/20">
       <BackgroundBeams className="opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_28%,transparent_74%)]" />
       <div className="relative z-10 grid lg:grid-cols-[0.9fr_1.1fr]">
-        <aside className="relative min-h-[32rem] overflow-hidden bg-black">
-          <img
-            src={motcaMascot}
-            alt=""
-            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-78 blur-sm"
-          />
-          <img
-            src={motcaMascot}
-            alt="Mascota de MOTCA"
-            className="absolute inset-0 h-full w-full object-contain p-5 [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_78%)]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/22 to-transparent" />
-          <div className="absolute left-6 right-6 bottom-6 rounded-xl border border-white/10 bg-[#121817]/88 p-6 text-white shadow-2xl backdrop-blur-md md:left-8 md:right-8 md:bottom-8">
-            <p className="text-xl font-semibold leading-snug md:text-2xl">
-              "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
-            </p>
-            <div className="mt-5 flex items-center gap-3">
-              <div className="h-11 w-11 overflow-hidden rounded-full border border-white/20 bg-navy">
-                <img
-                  src={motcaMascot}
-                  alt="Avatar de la mascota MOTCA"
-                  className="h-full w-full object-cover object-[28%_50%]"
-                />
-              </div>
-              <div>
-                <div className="text-sm font-semibold">MOTCA</div>
-                <div className="text-xs text-white/60">Mascota MOTCA</div>
-              </div>
-            </div>
-          </div>
-        </aside>
+        <FuturisticQuotePanel />
 
         <form onSubmit={submit} className="space-y-5 bg-[#090b0f] p-6 text-white md:p-9 lg:p-10">
           <div className="mb-2">
-            <div className="mb-5 font-display text-4xl font-bold tracking-tight text-white">M</div>
+            <div className="mb-5 font-display text-sm font-bold uppercase tracking-[0.28em] text-motca-green">MOTCA</div>
             <div className="font-display text-3xl font-bold tracking-tight text-white">Solicita tu diagnóstico</div>
             <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/65">
               Usamos estas respuestas para orientar el diagnóstico inicial y priorizar los pilotos adecuados.
@@ -762,6 +718,30 @@ function DiagnosticForm() {
         </form>
       </div>
     </div>
+  );
+}
+
+function FuturisticQuotePanel({ compact = false }: { compact?: boolean }) {
+  return (
+    <aside
+      className={`relative z-20 flex overflow-hidden bg-[#06090d] text-white ${
+        compact ? "hidden min-h-[28rem] md:flex" : "min-h-[32rem]"
+      }`}
+    >
+      <div className="absolute inset-0 bg-[linear-gradient(135deg,oklch(0.2_0.07_260)_0%,oklch(0.18_0.08_248)_42%,oklch(0.12_0.03_250)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.74_0.18_155/0.18)_0_1px,transparent_1px_42px),linear-gradient(0deg,oklch(0.62_0.2_250/0.14)_0_1px,transparent_1px_42px)] opacity-45" />
+      <BackgroundBeams className="opacity-55 mix-blend-screen [mask-image:linear-gradient(90deg,black,black_72%,transparent)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent,black/24_70%,black/48)]" />
+      <div className="relative z-10 flex w-full flex-col items-center justify-center px-8 py-12 text-center md:px-10">
+        <div className="mb-8 font-display text-sm font-bold uppercase tracking-[0.32em] text-motca-green">
+          MOTCA
+        </div>
+        <blockquote className="max-w-md font-display text-2xl font-semibold leading-tight md:text-3xl">
+          "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
+        </blockquote>
+        <div className="mt-8 h-px w-24 bg-gradient-to-r from-transparent via-motca-green to-transparent" />
+      </div>
+    </aside>
   );
 }
 
