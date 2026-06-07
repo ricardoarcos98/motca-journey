@@ -8,6 +8,7 @@ import GlobeDemo from "@/components/globe-demo";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BackgroundLines } from "@/components/ui/background-lines";
+import motcaMascot from "@/assets/motca-mascot.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -56,13 +57,25 @@ const featureOptions = [
   "Recursos descargables",
 ];
 const duolingoOptions = ["Sí, totalmente", "Sí, si es divertida", "Tal vez", "No lo creo"];
+const whatsappNumber = "573128438532";
+
+const getWhatsAppHref = (message: string) =>
+  `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
 function Landing() {
   const [activeNode, setActiveNode] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen overflow-x-hidden">
+      <div className="fixed inset-0 -z-50 bg-navy-deep" aria-hidden="true">
+        <img
+          src={motcaMascot}
+          alt=""
+          className="h-full w-full object-cover opacity-20 saturate-125"
+        />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.16),transparent_46%),linear-gradient(180deg,oklch(0.2_0.07_260/0.58),oklch(0.985_0.01_240/0.88)_42%,oklch(0.985_0.01_240/0.94))]" />
+      </div>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
       <link
@@ -71,7 +84,7 @@ function Landing() {
       />
 
       {/* NAV */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-background/75 border-b border-border">
+      <header className="sticky top-0 z-40 backdrop-blur-md bg-background/82 border-b border-border">
         <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
           <a href="#top" className="font-display font-bold text-navy text-lg tracking-tight">
             MOTCA
@@ -116,7 +129,7 @@ function Landing() {
 
       {/* HERO */}
       <section id="top" className="relative overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.12),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.10),transparent_55%)]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.14),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.12),transparent_55%),linear-gradient(180deg,oklch(1_0_0/0.86),oklch(1_0_0/0.72))]" />
           <div className="max-w-7xl mx-auto px-5 py-14 md:py-18 lg:py-20">
             <div className="grid items-center gap-10 md:grid-cols-[minmax(0,0.95fr)_minmax(360px,1.05fr)] xl:gap-14">
             <motion.div
@@ -158,11 +171,11 @@ function Landing() {
           </div>
       </section>
 
-      <SectionDivider />
+      <SectionDivider variant="heroToArchitecture" />
 
       {/* ARCHITECTURE */}
       <section id="architecture" className="relative overflow-hidden py-16 md:py-20">
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,oklch(0.98_0.01_240)_0%,oklch(0.95_0.035_245)_100%)]" />
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,oklch(0.98_0.01_240/0.84)_0%,oklch(0.95_0.035_245/0.88)_100%)] backdrop-blur-[1px]" />
           <div className="max-w-6xl mx-auto px-5">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -175,7 +188,7 @@ function Landing() {
           </div>
       </section>
 
-      <SectionDivider flip />
+      <SectionDivider variant="architectureToModel" />
 
       {/* MODEL NODES */}
       <Section id="model" eyebrow="El modelo" title="Cuatro nodos. Un centro cognitivo." tone="clean">
@@ -207,7 +220,7 @@ function Landing() {
       </Section>
 
 
-      <SectionDivider />
+      <SectionDivider variant="modelToOrigin" />
 
       {/* ORIGIN */}
       <Section id="origin" eyebrow="Origen del modelo" title="La evolución de la autonomía" tone="mint">
@@ -235,7 +248,7 @@ function Landing() {
         </div>
       </Section>
 
-      <SectionDivider flip />
+      <SectionDivider variant="originToPaths" />
 
       {/* PATHS */}
       <Section id="paths" eyebrow="Vías" title="Vías de expansión" tone="blue">
@@ -246,7 +259,7 @@ function Landing() {
           </div>
       </Section>
 
-      <SectionDivider />
+      <SectionDivider variant="pathsToForm" />
 
       {/* FORM */}
       <Section id="form" eyebrow="Diagnóstico" title="Solicita tu diagnóstico de entrada" subtitle="Una entrevista estructurada para identificar tu punto de partida en el modelo MOTCA." tone="form">
@@ -281,10 +294,10 @@ function Section({
   tone?: "clean" | "mint" | "blue" | "form";
 }) {
   const toneClass = {
-    clean: "bg-white",
-    mint: "bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.12),transparent_58%),linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.96_0.02_225))]",
-    blue: "bg-[linear-gradient(180deg,oklch(0.96_0.028_245),oklch(0.93_0.045_248))]",
-    form: "bg-[radial-gradient(ellipse_at_top_right,oklch(0.74_0.18_155/0.14),transparent_55%),linear-gradient(180deg,oklch(0.98_0.01_235),oklch(1_0_0))]",
+    clean: "bg-white/82 backdrop-blur-[1px]",
+    mint: "bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.14),transparent_58%),linear-gradient(180deg,oklch(0.99_0.005_240/0.82),oklch(0.96_0.02_225/0.86))] backdrop-blur-[1px]",
+    blue: "bg-[linear-gradient(180deg,oklch(0.96_0.028_245/0.84),oklch(0.93_0.045_248/0.88))] backdrop-blur-[1px]",
+    form: "bg-[radial-gradient(ellipse_at_top_right,oklch(0.74_0.18_155/0.16),transparent_55%),linear-gradient(180deg,oklch(0.98_0.01_235/0.82),oklch(1_0_0/0.9))] backdrop-blur-[1px]",
   }[tone];
 
   return (
@@ -307,23 +320,35 @@ function Section({
   );
 }
 
-function SectionDivider({ flip = false }: { flip?: boolean }) {
+function SectionDivider({
+  variant = "heroToArchitecture",
+}: {
+  variant?: "heroToArchitecture" | "architectureToModel" | "modelToOrigin" | "originToPaths" | "pathsToForm";
+}) {
+  const gradientClass = {
+    heroToArchitecture:
+      "from-white via-electric/10 to-[oklch(0.95_0.035_245)]",
+    architectureToModel:
+      "from-[oklch(0.95_0.035_245)] via-motca-green/10 to-white",
+    modelToOrigin:
+      "from-white via-motca-green/12 to-[oklch(0.96_0.02_225)]",
+    originToPaths:
+      "from-[oklch(0.96_0.02_225)] via-electric/10 to-[oklch(0.96_0.028_245)]",
+    pathsToForm:
+      "from-[oklch(0.93_0.045_248)] via-motca-green/14 to-[oklch(0.98_0.01_235)]",
+  }[variant];
+
   return (
-    <div className={`relative h-10 overflow-hidden bg-white ${flip ? "rotate-180" : ""}`} aria-hidden="true">
+    <div className={`relative h-14 overflow-hidden bg-gradient-to-b ${gradientClass}`} aria-hidden="true">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent" />
       <motion.div
-        className="absolute left-1/2 top-1/2 h-px w-[84vw] -translate-x-1/2 bg-gradient-to-r from-transparent via-electric/50 to-transparent"
+        className="absolute left-1/2 top-1/2 h-[2px] w-[76vw] -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-white/70 to-transparent"
         initial={{ scaleX: 0, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       />
-      <motion.div
-        className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-motca-green shadow-[0_0_24px_oklch(0.74_0.18_155/0.7)]"
-        initial={{ scale: 0.4, opacity: 0 }}
-        whileInView={{ scale: 1, opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.35, duration: 0.4 }}
-      />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/40 to-transparent" />
     </div>
   );
 }
@@ -556,14 +581,27 @@ function DiagnosticForm() {
   if (done) {
     return (
       <BackgroundLines
-        className="relative flex h-auto min-h-[24rem] items-center justify-center overflow-hidden rounded-lg border border-motca-green/40 bg-white px-6 py-10 text-center shadow-xl shadow-navy/5"
+        className="relative grid h-auto min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5 md:grid-cols-[0.82fr_1.18fr]"
         svgOptions={{ duration: 8 }}
       >
+        <div className="relative z-20 hidden min-h-[28rem] overflow-hidden md:block">
+          <img
+            src={motcaMascot}
+            alt=""
+            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-75 blur-sm"
+          />
+          <img
+            src={motcaMascot}
+            alt="Mascota de MOTCA"
+            className="relative z-10 h-full w-full object-contain p-5 [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_78%)]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/70 via-navy-deep/5 to-transparent" />
+        </div>
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="relative z-20 max-w-2xl"
+          className="relative z-20 flex min-h-[28rem] flex-col justify-center px-7 py-10 text-center md:px-12"
         >
           <div className="absolute inset-0 -z-10 rounded-full bg-white/70 blur-3xl" />
           <motion.div
@@ -580,99 +618,157 @@ function DiagnosticForm() {
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
             Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo.
           </p>
+          <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <a
+              href={getWhatsAppHref("Hola MOTCA, ya envié mi diagnóstico y quiero agendar una demo.")}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-navy/20 transition-colors hover:bg-navy-deep"
+            >
+              Agendar una demo
+            </a>
+            <a
+              href="#top"
+              className="inline-flex items-center justify-center rounded-lg border border-border bg-white px-5 py-3 text-sm font-semibold text-navy transition-colors hover:border-electric hover:text-electric"
+            >
+              Volver al inicio
+            </a>
+          </div>
         </motion.div>
       </BackgroundLines>
     );
   }
 
   return (
-    <form onSubmit={submit} className="p-6 md:p-10 rounded-lg bg-card border border-border space-y-6">
-      <div className="grid md:grid-cols-2 gap-4">
-        <Field label="Nombre completo">
-          <input className={inputCls} value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} maxLength={120} />
-        </Field>
-        <Field label="Teléfono">
-          <input className={inputCls} value={data.phone} onChange={(e) => setData({ ...data, phone: e.target.value })} maxLength={20} />
-        </Field>
-        <Field label="Cargo o rol actual">
-          <input className={inputCls} value={data.role} onChange={(e) => setData({ ...data, role: e.target.value })} maxLength={120} />
-        </Field>
-        <Field label="Correo electrónico">
-          <input type="email" className={inputCls} value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} maxLength={120} />
-        </Field>
-        <Field label="Vía de expansión" className="md:col-span-2">
-          <select className={inputCls} value={data.path} onChange={(e) => setData({ ...data, path: e.target.value })}>
-            <option value="">Selecciona una vía…</option>
-            {paths.map((p) => <option key={p} value={p}>{p}</option>)}
-          </select>
-        </Field>
+    <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#090b0f] shadow-2xl shadow-navy/20">
+      <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+        <aside className="relative min-h-[32rem] overflow-hidden bg-black">
+          <img
+            src={motcaMascot}
+            alt=""
+            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-78 blur-sm"
+          />
+          <img
+            src={motcaMascot}
+            alt="Mascota de MOTCA"
+            className="absolute inset-0 h-full w-full object-contain p-5 [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_78%)]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/22 to-transparent" />
+          <div className="absolute left-6 right-6 bottom-6 rounded-xl border border-white/10 bg-[#121817]/88 p-6 text-white shadow-2xl backdrop-blur-md md:left-8 md:right-8 md:bottom-8">
+            <p className="text-xl font-semibold leading-snug md:text-2xl">
+              "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
+            </p>
+            <div className="mt-5 flex items-center gap-3">
+              <div className="h-11 w-11 overflow-hidden rounded-full border border-white/20 bg-navy">
+                <img
+                  src={motcaMascot}
+                  alt="Avatar de la mascota MOTCA"
+                  className="h-full w-full object-cover object-[28%_50%]"
+                />
+              </div>
+              <div>
+                <div className="text-sm font-semibold">MOTCA</div>
+                <div className="text-xs text-white/60">Mascota MOTCA</div>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <form onSubmit={submit} className="space-y-5 bg-[#090b0f] p-6 text-white md:p-9 lg:p-10">
+          <div className="mb-2">
+            <div className="mb-5 font-display text-4xl font-bold tracking-tight text-white">M</div>
+            <div className="font-display text-3xl font-bold tracking-tight text-white">Solicita tu diagnóstico</div>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/65">
+              Usamos estas respuestas para orientar el diagnóstico inicial y priorizar los pilotos adecuados.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="Nombre completo">
+              <input className={inputCls} value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} maxLength={120} />
+            </Field>
+            <Field label="Teléfono">
+              <input className={inputCls} value={data.phone} onChange={(e) => setData({ ...data, phone: e.target.value })} maxLength={20} />
+            </Field>
+            <Field label="Cargo o rol actual">
+              <input className={inputCls} value={data.role} onChange={(e) => setData({ ...data, role: e.target.value })} maxLength={120} />
+            </Field>
+            <Field label="Correo electrónico">
+              <input type="email" className={inputCls} value={data.email} onChange={(e) => setData({ ...data, email: e.target.value })} maxLength={120} />
+            </Field>
+            <Field label="Vía de expansión" className="md:col-span-2">
+              <select className={inputCls} value={data.path} onChange={(e) => setData({ ...data, path: e.target.value })}>
+                <option value="">Selecciona una vía…</option>
+                {paths.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </Field>
+          </div>
+
+          <Group label="¿En qué terreno quieres activar tu capacidad?">
+            <div className="flex flex-wrap gap-2">
+              {terrains.map((t) => (
+                <Chip key={t} active={data.terrain === t} onClick={() => setData({ ...data, terrain: t })}>{t}</Chip>
+              ))}
+            </div>
+          </Group>
+
+          <Group label="¿Cómo te gustaría aprender?">
+            <div className="flex flex-wrap gap-2">
+              {learnOptions.map((o) => (
+                <Chip key={o} active={data.learn.includes(o)} onClick={() => toggle("learn", o)}>{o}</Chip>
+              ))}
+            </div>
+          </Group>
+
+          <Group label="Funciones esperadas">
+            <div className="flex flex-wrap gap-2">
+              {featureOptions.map((o) => (
+                <Chip key={o} active={data.features.includes(o)} onClick={() => toggle("features", o)}>{o}</Chip>
+              ))}
+            </div>
+          </Group>
+
+          <Group label="¿Usarías una app tipo Duolingo?">
+            <div className="flex flex-wrap gap-2">
+              {duolingoOptions.map((o) => (
+                <Chip key={o} active={data.duolingo === o} onClick={() => setData({ ...data, duolingo: o })}>{o}</Chip>
+              ))}
+            </div>
+          </Group>
+
+          <Field label="Comentario abierto">
+            <textarea
+              className={`${inputCls} min-h-[100px] resize-y`}
+              value={data.comment}
+              onChange={(e) => setData({ ...data, comment: e.target.value })}
+              maxLength={1000}
+            />
+          </Field>
+
+          {error && <p className="text-sm font-medium text-red-200">{error}</p>}
+
+          <motion.button
+            whileHover={{ y: submitting ? 0 : -2 }}
+            whileTap={{ scale: submitting ? 1 : 0.98 }}
+            type="submit"
+            disabled={submitting}
+            className="w-full rounded-lg bg-white px-7 py-3.5 font-semibold text-navy-deep shadow-lg shadow-white/10 transition-colors hover:bg-motca-green disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+          >
+            {submitting ? "Enviando…" : "Enviar diagnóstico"}
+          </motion.button>
+        </form>
       </div>
-
-      <Group label="¿En qué terreno quieres activar tu capacidad?">
-        <div className="flex flex-wrap gap-2">
-          {terrains.map((t) => (
-            <Chip key={t} active={data.terrain === t} onClick={() => setData({ ...data, terrain: t })}>{t}</Chip>
-          ))}
-        </div>
-      </Group>
-
-      
-
-      <Group label="¿Cómo te gustaría aprender?">
-        <div className="flex flex-wrap gap-2">
-          {learnOptions.map((o) => (
-            <Chip key={o} active={data.learn.includes(o)} onClick={() => toggle("learn", o)}>{o}</Chip>
-          ))}
-        </div>
-      </Group>
-
-      <Group label="Funciones esperadas">
-        <div className="flex flex-wrap gap-2">
-          {featureOptions.map((o) => (
-            <Chip key={o} active={data.features.includes(o)} onClick={() => toggle("features", o)}>{o}</Chip>
-          ))}
-        </div>
-      </Group>
-
-      <Group label="¿Usarías una app tipo Duolingo?">
-        <div className="flex flex-wrap gap-2">
-          {duolingoOptions.map((o) => (
-            <Chip key={o} active={data.duolingo === o} onClick={() => setData({ ...data, duolingo: o })}>{o}</Chip>
-          ))}
-        </div>
-      </Group>
-
-      <Field label="Comentario abierto">
-        <textarea
-          className={`${inputCls} min-h-[100px] resize-y`}
-          value={data.comment}
-          onChange={(e) => setData({ ...data, comment: e.target.value })}
-          maxLength={1000}
-        />
-      </Field>
-
-      {error && <p className="text-sm text-destructive">{error}</p>}
-
-      <motion.button
-        whileHover={{ y: submitting ? 0 : -2 }}
-        whileTap={{ scale: submitting ? 1 : 0.98 }}
-        type="submit"
-        disabled={submitting}
-        className="w-full md:w-auto px-7 py-3.5 rounded-lg bg-navy text-primary-foreground font-semibold hover:bg-navy-deep transition-colors shadow-lg shadow-navy/20 disabled:opacity-60 disabled:cursor-not-allowed"
-      >
-        {submitting ? "Enviando…" : "Quiero mi diagnóstico de entrada"}
-      </motion.button>
-    </form>
+    </div>
   );
 }
 
 const inputCls =
-  "w-full px-4 py-2.5 rounded-md bg-background border border-input text-navy-deep placeholder:text-muted-foreground focus:outline-none focus:border-electric focus:ring-2 focus:ring-electric/20 transition-all";
+  "w-full rounded-lg border border-white/10 bg-white/10 px-4 py-3 text-white outline-none transition-all placeholder:text-white/40 focus:border-motca-green focus:ring-2 focus:ring-motca-green/20 [&>option]:bg-navy-deep [&>option]:text-white";
 
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return (
     <label className={`block ${className}`}>
-      <span className="block text-sm font-medium text-navy-deep mb-1.5">{label}</span>
+      <span className="mb-1.5 block text-sm font-medium text-current">{label}</span>
       {children}
     </label>
   );
@@ -681,7 +777,7 @@ function Field({ label, children, className = "" }: { label: string; children: R
 function Group({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="text-sm font-medium text-navy-deep mb-2">{label}</div>
+      <div className="mb-2 text-sm font-medium text-current">{label}</div>
       {children}
     </div>
   );
@@ -694,8 +790,8 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       onClick={onClick}
       className={`px-4 py-2 rounded-md text-sm font-medium border transition-all ${
         active
-          ? "bg-electric text-white border-electric"
-          : "bg-background text-navy-deep border-border hover:border-electric"
+          ? "bg-motca-green text-navy-deep border-motca-green"
+          : "bg-white/10 text-white/85 border-white/15 hover:border-motca-green hover:bg-white/15"
       }`}
     >
       {children}
@@ -704,11 +800,9 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
 }
 
 function WhatsAppFeedbackButton() {
-  const text = encodeURIComponent("Hola MOTCA, quiero dejar un feedback rápido sobre la landing y el piloto.");
-
   return (
     <motion.a
-      href={`https://wa.me/?text=${text}`}
+      href={getWhatsAppHref("Hola MOTCA, quiero dejar un feedback rápido sobre la landing y el piloto.")}
       target="_blank"
       rel="noreferrer"
       aria-label="Enviar feedback rápido por WhatsApp"
