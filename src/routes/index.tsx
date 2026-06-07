@@ -1,11 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { MessageCircle } from "lucide-react";
 import { submitDiagnostic } from "@/lib/diagnostic.functions";
 import GlobeDemo from "@/components/globe-demo";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
-import { FollowerPointerCard } from "@/components/ui/following-pointer";
+import { GlowingEffect } from "@/components/ui/glowing-effect";
+import { BackgroundLines } from "@/components/ui/background-lines";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,16 +56,10 @@ const featureOptions = [
   "Recursos descargables",
 ];
 const duolingoOptions = ["Sí, totalmente", "Sí, si es divertida", "Tal vez", "No lo creo"];
-const priceOptions = ["Gratis", "$0 - $10.000", "$10.000 - $25.000", "$25.000 o más"];
 
 function Landing() {
   const [activeNode, setActiveNode] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const t = setInterval(() => setActiveNode((p) => (p + 1) % 4), 3200);
-    return () => clearInterval(t);
-  }, []);
 
   return (
     <div className="min-h-screen">
@@ -118,9 +114,8 @@ function Landing() {
         </AnimatePresence>
       </header>
 
-      <FollowerPointerCard title={<MotcaPointerLabel />} className="relative">
-        {/* HERO */}
-        <section id="top" className="relative overflow-hidden">
+      {/* HERO */}
+      <section id="top" className="relative overflow-hidden">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.12),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.10),transparent_55%)]" />
           <div className="max-w-7xl mx-auto px-5 py-14 md:py-18 lg:py-20">
             <div className="grid items-center gap-10 md:grid-cols-[minmax(0,0.95fr)_minmax(360px,1.05fr)] xl:gap-14">
@@ -161,10 +156,13 @@ function Landing() {
             </motion.div>
             </div>
           </div>
-        </section>
+      </section>
 
-        {/* ARCHITECTURE */}
-        <section id="architecture" className="relative py-16 md:py-20">
+      <SectionDivider />
+
+      {/* ARCHITECTURE */}
+      <section id="architecture" className="relative overflow-hidden py-16 md:py-20">
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(180deg,oklch(0.98_0.01_240)_0%,oklch(0.95_0.035_245)_100%)]" />
           <div className="max-w-6xl mx-auto px-5">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -175,10 +173,12 @@ function Landing() {
               <LevelsDiagram active={activeNode} onHover={setActiveNode} />
             </motion.div>
           </div>
-        </section>
+      </section>
 
-        {/* MODEL NODES */}
-        <Section id="model" eyebrow="El modelo" title="Cuatro nodos. Un centro cognitivo.">
+      <SectionDivider flip />
+
+      {/* MODEL NODES */}
+      <Section id="model" eyebrow="El modelo" title="Cuatro nodos. Un centro cognitivo." tone="clean">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {nodes.map((node, i) => (
               <motion.button
@@ -191,10 +191,11 @@ function Landing() {
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 whileHover={{ y: -4 }}
-                className={`text-left p-6 rounded-lg bg-card border transition-all ${
+                className={`relative overflow-hidden text-left p-6 rounded-lg bg-card border transition-all ${
                   activeNode === i ? "border-electric shadow-lg shadow-electric/10" : "border-border"
                 }`}
               >
+                <GlowingEffect spread={32} glow disabled={false} proximity={80} inactiveZone={0.01} borderWidth={1.4} />
                 <div className={`text-xs font-mono font-semibold mb-3 transition-colors ${activeNode === i ? "text-electric" : "text-muted-foreground"}`}>
                   NODO {node.n}
                 </div>
@@ -203,11 +204,13 @@ function Landing() {
               </motion.button>
             ))}
           </div>
-        </Section>
+      </Section>
 
 
-        {/* ORIGIN */}
-        <Section id="origin" eyebrow="Origen del modelo" title="La evolución de la autonomía">
+      <SectionDivider />
+
+      {/* ORIGIN */}
+      <Section id="origin" eyebrow="Origen del modelo" title="La evolución de la autonomía" tone="mint">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <p className="text-lg text-muted-foreground leading-relaxed">
               MOTCA replica el proceso natural de aprender a leer: primero se reconocen sonidos, luego se entiende la sintaxis, después se lee con fluidez y finalmente se escribe con autonomía. Esa misma lógica se aplica al aprendizaje de tecnología e IA.
@@ -227,25 +230,30 @@ function Landing() {
                   </div>
                   <span className="font-display font-semibold text-navy-deep">{step}</span>
                 </motion.div>
-              ))}
-            </div>
+            ))}
           </div>
-        </Section>
+        </div>
+      </Section>
 
-        {/* PATHS */}
-        <Section id="paths" eyebrow="Vías" title="Vías de expansión">
+      <SectionDivider flip />
+
+      {/* PATHS */}
+      <Section id="paths" eyebrow="Vías" title="Vías de expansión" tone="blue">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
             {paths.map((p, i) => (
               <RevealPathCard key={p} path={p} index={i} />
             ))}
           </div>
-        </Section>
-      </FollowerPointerCard>
+      </Section>
+
+      <SectionDivider />
 
       {/* FORM */}
-      <Section id="form" eyebrow="Diagnóstico" title="Solicita tu diagnóstico de entrada" subtitle="Una entrevista estructurada para identificar tu punto de partida en el modelo MOTCA.">
+      <Section id="form" eyebrow="Diagnóstico" title="Solicita tu diagnóstico de entrada" subtitle="Una entrevista estructurada para identificar tu punto de partida en el modelo MOTCA." tone="form">
         <DiagnosticForm />
       </Section>
+
+      <WhatsAppFeedbackButton />
 
       <footer className="border-t border-border mt-12">
         <div className="max-w-6xl mx-auto px-5 py-8 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground">
@@ -263,37 +271,60 @@ function Section({
   title,
   subtitle,
   children,
+  tone = "clean",
 }: {
   id?: string;
   eyebrow: string;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
+  tone?: "clean" | "mint" | "blue" | "form";
 }) {
+  const toneClass = {
+    clean: "bg-white",
+    mint: "bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.12),transparent_58%),linear-gradient(180deg,oklch(0.99_0.005_240),oklch(0.96_0.02_225))]",
+    blue: "bg-[linear-gradient(180deg,oklch(0.96_0.028_245),oklch(0.93_0.045_248))]",
+    form: "bg-[radial-gradient(ellipse_at_top_right,oklch(0.74_0.18_155/0.14),transparent_55%),linear-gradient(180deg,oklch(0.98_0.01_235),oklch(1_0_0))]",
+  }[tone];
+
   return (
-    <section id={id} className="max-w-6xl mx-auto px-5 py-16 md:py-24">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.6 }}
-        className="mb-10"
-      >
-        <div className="text-xs font-mono font-semibold tracking-widest text-electric uppercase">{eyebrow}</div>
-        <h2 className="mt-3 text-3xl md:text-4xl font-bold text-navy-deep max-w-3xl">{title}</h2>
-        {subtitle && <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>}
-      </motion.div>
-      {children}
+    <section id={id} className={`relative overflow-hidden py-16 md:py-24 ${toneClass}`}>
+      <div className="relative z-10 max-w-6xl mx-auto px-5">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.6 }}
+          className="mb-10"
+        >
+          <div className="text-xs font-mono font-semibold tracking-widest text-electric uppercase">{eyebrow}</div>
+          <h2 className="mt-3 text-3xl md:text-4xl font-bold text-navy-deep max-w-3xl">{title}</h2>
+          {subtitle && <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>}
+        </motion.div>
+        {children}
+      </div>
     </section>
   );
 }
 
-function MotcaPointerLabel() {
+function SectionDivider({ flip = false }: { flip?: boolean }) {
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-navy px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-white shadow-lg shadow-navy/20">
-      <span className="h-1.5 w-1.5 rounded-full bg-motca-green" />
-      MOTCA
-    </span>
+    <div className={`relative h-10 overflow-hidden bg-white ${flip ? "rotate-180" : ""}`} aria-hidden="true">
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-px w-[84vw] -translate-x-1/2 bg-gradient-to-r from-transparent via-electric/50 to-transparent"
+        initial={{ scaleX: 0, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      />
+      <motion.div
+        className="absolute left-1/2 top-1/2 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-motca-green shadow-[0_0_24px_oklch(0.74_0.18_155/0.7)]"
+        initial={{ scale: 0.4, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay: 0.35, duration: 0.4 }}
+      />
+    </div>
   );
 }
 
@@ -309,7 +340,8 @@ function LevelsDiagram({
   const nodeColumns = compact ? [nodes] : [nodes.slice(0, 2), nodes.slice(2)];
 
   return (
-    <div data-motca-levels className="relative p-6 md:p-8 rounded-2xl bg-card border border-border shadow-xl shadow-navy/5">
+    <div data-motca-levels className="relative overflow-hidden p-6 md:p-8 rounded-2xl bg-card border border-border shadow-xl shadow-navy/5">
+      <GlowingEffect spread={46} glow disabled={false} proximity={120} inactiveZone={0.01} borderWidth={1.5} />
       <div className="flex items-center justify-between mb-6">
         <div className="text-[10px] font-mono font-semibold tracking-widest text-muted-foreground uppercase">
           Arquitectura MOTCA
@@ -335,12 +367,13 @@ function LevelsDiagram({
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
-                  className={`relative min-h-[142px] p-5 rounded-lg border transition-all cursor-pointer ${
+                  className={`relative min-h-[142px] overflow-hidden p-5 rounded-lg border transition-all cursor-pointer ${
                     isActive
                       ? "border-electric bg-electric/5"
                       : "border-border bg-background hover:border-electric/50"
                   }`}
                 >
+                  <GlowingEffect spread={34} glow disabled={false} proximity={86} inactiveZone={0.01} borderWidth={1.2} />
                   <div
                     className={`w-10 h-10 rounded-md flex items-center justify-center font-mono font-bold text-sm transition-colors mb-4 ${
                       isActive ? "bg-electric text-white" : "bg-muted text-navy-deep"
@@ -450,6 +483,7 @@ function RevealPathCard({ path, index }: { path: string; index: number }) {
       whileHover={{ y: -3 }}
       className="group relative min-h-[112px] overflow-hidden rounded-lg border border-border bg-card p-5 transition-colors hover:border-motca-green"
     >
+      <GlowingEffect spread={34} glow disabled={false} proximity={72} inactiveZone={0.01} borderWidth={1.3} />
       <div
         className="absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
         aria-hidden="true"
@@ -484,7 +518,6 @@ function DiagnosticForm() {
     learn: [] as string[],
     features: [] as string[],
     duolingo: "",
-    price: "",
     comment: "",
   });
   const [error, setError] = useState<string | null>(null);
@@ -522,28 +555,33 @@ function DiagnosticForm() {
 
   if (done) {
     return (
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5 }}
-        className="p-8 md:p-12 rounded-lg bg-card border border-motca-green/40 text-center relative overflow-hidden"
+      <BackgroundLines
+        className="relative flex h-auto min-h-[24rem] items-center justify-center overflow-hidden rounded-lg border border-motca-green/40 bg-white px-6 py-10 text-center shadow-xl shadow-navy/5"
+        svgOptions={{ duration: 8 }}
       >
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.12),transparent_70%)]" />
         <motion.div
-          initial={{ scale: 0, rotate: -45 }}
-          animate={{ scale: 1, rotate: 0 }}
-          transition={{ type: "spring", delay: 0.1 }}
-          className="w-16 h-16 mx-auto rounded-full bg-motca-green flex items-center justify-center text-white"
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="relative z-20 max-w-2xl"
         >
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
+          <div className="absolute inset-0 -z-10 rounded-full bg-white/70 blur-3xl" />
+          <motion.div
+            initial={{ scale: 0, rotate: -45 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", delay: 0.1 }}
+            className="w-16 h-16 mx-auto rounded-full bg-motca-green flex items-center justify-center text-white shadow-lg shadow-motca-green/30"
+          >
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </motion.div>
+          <h3 className="mt-6 text-2xl md:text-3xl font-bold text-navy-deep">Ya estás en lista de espera</h3>
+          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+            Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo.
+          </p>
         </motion.div>
-        <h3 className="mt-6 text-2xl md:text-3xl font-bold text-navy-deep">Ya estás en lista de espera</h3>
-        <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-          Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo.
-        </p>
-      </motion.div>
+      </BackgroundLines>
     );
   }
 
@@ -600,14 +638,6 @@ function DiagnosticForm() {
         <div className="flex flex-wrap gap-2">
           {duolingoOptions.map((o) => (
             <Chip key={o} active={data.duolingo === o} onClick={() => setData({ ...data, duolingo: o })}>{o}</Chip>
-          ))}
-        </div>
-      </Group>
-
-      <Group label="¿Cuánto pagarías al mes?">
-        <div className="flex flex-wrap gap-2">
-          {priceOptions.map((o) => (
-            <Chip key={o} active={data.price === o} onClick={() => setData({ ...data, price: o })}>{o}</Chip>
           ))}
         </div>
       </Group>
@@ -670,5 +700,31 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     >
       {children}
     </button>
+  );
+}
+
+function WhatsAppFeedbackButton() {
+  const text = encodeURIComponent("Hola MOTCA, quiero dejar un feedback rápido sobre la landing y el piloto.");
+
+  return (
+    <motion.a
+      href={`https://wa.me/?text=${text}`}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Enviar feedback rápido por WhatsApp"
+      initial={{ opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.8, duration: 0.45 }}
+      whileHover={{ y: -3, scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className="group fixed bottom-5 right-5 z-50 inline-flex h-14 w-14 items-center justify-center overflow-hidden rounded-full bg-[#25D366] text-sm font-semibold text-white shadow-xl shadow-[#25D366]/25 ring-1 ring-white/60 transition-all duration-300 hover:w-44 hover:bg-[#1fbd58] md:bottom-6 md:right-6"
+    >
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/18">
+        <MessageCircle className="h-5 w-5" aria-hidden="true" />
+      </span>
+      <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300 group-hover:ml-2 group-hover:max-w-28 group-hover:opacity-100">
+        Feedback rápido
+      </span>
+    </motion.a>
   );
 }
