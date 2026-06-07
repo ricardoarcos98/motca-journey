@@ -8,6 +8,7 @@ import GlobeDemo from "@/components/globe-demo";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BackgroundLines } from "@/components/ui/background-lines";
+import { BackgroundBeams } from "@/components/ui/background-beams";
 import motcaMascot from "@/assets/motca-mascot.png";
 
 export const Route = createFileRoute("/")({
@@ -74,6 +75,7 @@ function Landing() {
           alt=""
           className="h-full w-full object-cover opacity-20 saturate-125"
         />
+        <BackgroundBeams className="opacity-45 mix-blend-screen [mask-image:linear-gradient(180deg,transparent_0%,black_12%,black_78%,transparent_100%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.16),transparent_46%),linear-gradient(180deg,oklch(0.2_0.07_260/0.58),oklch(0.985_0.01_240/0.88)_42%,oklch(0.985_0.01_240/0.94))]" />
       </div>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -640,8 +642,9 @@ function DiagnosticForm() {
   }
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/15 bg-[#090b0f] shadow-2xl shadow-navy/20">
-      <div className="grid lg:grid-cols-[0.9fr_1.1fr]">
+    <div className="relative overflow-hidden rounded-2xl border border-white/15 bg-[#090b0f] shadow-2xl shadow-navy/20">
+      <BackgroundBeams className="opacity-30 [mask-image:radial-gradient(ellipse_at_center,black_28%,transparent_74%)]" />
+      <div className="relative z-10 grid lg:grid-cols-[0.9fr_1.1fr]">
         <aside className="relative min-h-[32rem] overflow-hidden bg-black">
           <img
             src={motcaMascot}
