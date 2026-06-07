@@ -10,6 +10,7 @@ import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import motcaMascot from "@/assets/motca-mascot.png";
+import futuristicLandscape from "@/assets/motca-futuristic-landscape.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -311,29 +312,62 @@ function SectionDivider({
 }: {
   variant?: "heroToModel" | "modelToOrigin" | "originToPaths" | "pathsToForm";
 }) {
-  const accentClass = {
-    heroToModel:
-      "from-electric/0 via-electric/70 to-electric/0",
-    modelToOrigin:
-      "from-motca-green/0 via-motca-green/60 to-motca-green/0",
-    originToPaths:
-      "from-electric/0 via-electric/65 to-electric/0",
-    pathsToForm:
-      "from-motca-green/0 via-motca-green/70 to-motca-green/0",
+  const styles = {
+    heroToModel: {
+      base: "from-white/72 via-sky-100/52 to-white/82",
+      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.62_0.2_250/0.34),transparent_64%)]",
+      beam: "from-transparent via-electric/80 to-transparent",
+      shard: "from-electric/0 via-electric/18 to-motca-green/0",
+    },
+    modelToOrigin: {
+      base: "from-white/82 via-emerald-50/62 to-sky-50/76",
+      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.3),transparent_66%)]",
+      beam: "from-transparent via-motca-green/80 to-transparent",
+      shard: "from-motca-green/0 via-motca-green/18 to-electric/0",
+    },
+    originToPaths: {
+      base: "from-sky-50/76 via-cyan-50/66 to-blue-100/54",
+      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.62_0.2_250/0.3),transparent_64%)]",
+      beam: "from-transparent via-electric/75 to-transparent",
+      shard: "from-electric/0 via-cyan-300/22 to-electric/0",
+    },
+    pathsToForm: {
+      base: "from-blue-100/54 via-emerald-50/56 to-white/84",
+      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.3),transparent_64%)]",
+      beam: "from-transparent via-motca-green/80 to-transparent",
+      shard: "from-motca-green/0 via-cyan-300/22 to-electric/0",
+    },
   }[variant];
 
   return (
-    <div className="relative flex h-10 items-center justify-center overflow-hidden bg-white/40" aria-hidden="true">
-      <div className="relative h-4 w-[min(68rem,86vw)] rounded-full border border-white/70 bg-white/45 shadow-sm shadow-navy/5">
-        <GlowingEffect spread={44} glow disabled={false} proximity={96} inactiveZone={0.01} borderWidth={1.1} />
-        <motion.div
-          className={`absolute left-1/2 top-1/2 h-px w-[88%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r ${accentClass}`}
-          initial={{ scaleX: 0, opacity: 0 }}
-          whileInView={{ scaleX: 1, opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.75, ease: "easeOut" }}
-        />
-      </div>
+    <div
+      className={`relative h-20 overflow-hidden bg-gradient-to-r md:h-28 ${styles.base}`}
+      aria-hidden="true"
+    >
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+      <motion.div
+        className={`absolute left-1/2 top-1/2 h-24 w-[min(80rem,108vw)] -translate-x-1/2 -translate-y-1/2 blur-2xl md:h-32 ${styles.aura}`}
+        initial={{ opacity: 0.72, scaleX: 0.9 }}
+        whileInView={{ opacity: 1, scaleX: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
+      />
+      <motion.div
+        className={`absolute left-1/2 top-1/2 h-[2px] w-[min(78rem,92vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r ${styles.beam} shadow-[0_0_36px_oklch(0.62_0.2_250/0.32)]`}
+        initial={{ scaleX: 0.78, opacity: 0.82 }}
+        whileInView={{ scaleX: 1, opacity: 1 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      />
+      <motion.div
+        className={`absolute left-1/2 top-1/2 h-16 w-[min(70rem,88vw)] -translate-x-1/2 -translate-y-1/2 skew-x-[-18deg] bg-gradient-to-r ${styles.shard} opacity-70 [clip-path:polygon(0_42%,100%_0,92%_58%,7%_100%)]`}
+        initial={{ x: "-52%", opacity: 0.62 }}
+        whileInView={{ x: "-50%", opacity: 0.9 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 1, ease: "easeOut" }}
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,white/52,transparent_42%,white/45)]" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
     </div>
   );
 }
@@ -497,10 +531,9 @@ function DiagnosticForm() {
   if (done) {
     return (
       <BackgroundLines
-        className="relative grid h-auto min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5 md:grid-cols-[0.82fr_1.18fr]"
+        className="relative min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5"
         svgOptions={{ duration: 8 }}
       >
-        <FuturisticQuotePanel compact />
         <motion.div
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -552,17 +585,9 @@ function DiagnosticForm() {
       <GlowingEffect spread={58} glow disabled={false} proximity={140} inactiveZone={0.01} borderWidth={1.5} />
       <BackgroundBeams className="opacity-20 mix-blend-screen [mask-image:radial-gradient(ellipse_at_center,black_24%,transparent_74%)]" />
       <div className="relative z-10 grid lg:grid-cols-[0.9fr_1.1fr]">
-        <FuturisticQuotePanel />
+        <FuturisticLandscapePanel />
 
         <form onSubmit={submit} className="space-y-5 bg-white/88 p-6 text-navy-deep md:p-9 lg:p-10">
-          <div className="mb-2">
-            <div className="mb-5 font-display text-sm font-bold uppercase tracking-[0.28em] text-motca-green">MOTCA</div>
-            <div className="font-display text-3xl font-bold tracking-tight text-navy-deep">Solicita tu diagnóstico</div>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-              Usamos estas respuestas para orientar el diagnóstico inicial y priorizar los pilotos adecuados.
-            </p>
-          </div>
-
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Nombre completo">
               <input className={inputCls} value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} maxLength={120} />
@@ -643,36 +668,27 @@ function DiagnosticForm() {
   );
 }
 
-function FuturisticQuotePanel({ compact = false }: { compact?: boolean }) {
+function FuturisticLandscapePanel() {
   return (
     <aside
-      className={`relative z-20 flex overflow-hidden bg-[#06090d] text-white ${
-        compact ? "hidden min-h-[28rem] md:flex" : "min-h-[32rem]"
-      }`}
+      className="relative z-20 hidden min-h-[34rem] overflow-hidden bg-[#06090d] text-white lg:block"
     >
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(0.78_0.13_225)_0%,oklch(0.55_0.18_245)_38%,oklch(0.2_0.08_255)_69%,oklch(0.08_0.03_250)_100%)]" />
-      <div className="absolute inset-x-0 top-0 h-1/2 bg-[radial-gradient(ellipse_at_50%_85%,oklch(0.74_0.18_155/0.55),transparent_42%),radial-gradient(ellipse_at_70%_30%,oklch(0.62_0.2_250/0.45),transparent_44%)]" />
-      <div
-        className="absolute inset-x-0 bottom-[25%] h-[34%] bg-[linear-gradient(135deg,oklch(0.18_0.08_255),oklch(0.35_0.14_238),oklch(0.22_0.12_158))] opacity-95"
-        style={{ clipPath: "polygon(0 72%, 11% 45%, 23% 67%, 36% 22%, 52% 58%, 64% 32%, 76% 62%, 90% 30%, 100% 58%, 100% 100%, 0 100%)" }}
+      <img
+        src={futuristicLandscape}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover object-[50%_64%]"
       />
-      <div
-        className="absolute inset-x-0 bottom-[16%] h-[30%] bg-[linear-gradient(135deg,oklch(0.12_0.05_260),oklch(0.24_0.1_245),oklch(0.14_0.06_160))] opacity-95"
-        style={{ clipPath: "polygon(0 80%, 13% 52%, 27% 72%, 43% 36%, 58% 74%, 72% 42%, 86% 64%, 100% 48%, 100% 100%, 0 100%)" }}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_12%,oklch(0.1_0.04_255/0.12)_56%,oklch(0.06_0.03_260/0.58)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.06_0.03_260/0.42),transparent_30%,transparent_70%,oklch(0.06_0.03_260/0.54))]" />
+      <BackgroundBeams className="opacity-22 mix-blend-screen [mask-image:linear-gradient(90deg,black,black_82%,transparent)]" />
+      <motion.div
+        className="absolute left-1/2 top-[58%] h-px w-[76%] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/85 to-transparent shadow-[0_0_34px_oklch(0.74_0.18_155/0.42)]"
+        initial={{ scaleX: 0.35, opacity: 0 }}
+        whileInView={{ scaleX: 1, opacity: 0.9 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.9, ease: "easeOut" }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-[43%] origin-bottom bg-[linear-gradient(90deg,oklch(0.74_0.18_155/0.18)_0_1px,transparent_1px_54px),linear-gradient(0deg,oklch(0.62_0.2_250/0.28)_0_1px,transparent_1px_32px)] [transform:perspective(520px)_rotateX(58deg)]" />
-      <BackgroundBeams className="opacity-42 mix-blend-screen [mask-image:linear-gradient(90deg,black,black_82%,transparent)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,black/5,transparent_38%,black/30_78%,black/52)]" />
-      <div className="relative z-10 flex w-full flex-col items-center justify-center px-8 py-12 text-center md:px-10">
-        <div className="mb-8 font-display text-sm font-bold uppercase tracking-[0.32em] text-white">
-          MOTCA
-        </div>
-        <blockquote className="relative max-w-md overflow-hidden rounded-xl border border-white/22 bg-navy-deep/42 px-6 py-6 font-display text-2xl font-semibold leading-tight text-white shadow-2xl shadow-navy/25 backdrop-blur-md md:text-3xl">
-          <GlowingEffect spread={36} glow disabled={false} proximity={90} inactiveZone={0.01} borderWidth={1.2} />
-          "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
-        </blockquote>
-        <div className="mt-8 h-px w-24 bg-gradient-to-r from-transparent via-white to-transparent" />
-      </div>
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-navy-deep/70 to-transparent" />
     </aside>
   );
 }
