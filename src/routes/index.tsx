@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Moon, Sun } from "lucide-react";
 import { submitDiagnostic } from "@/lib/diagnostic.functions";
 import GlobeDemo from "@/components/globe-demo";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
 import { BackgroundLines } from "@/components/ui/background-lines";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { Boxes } from "@/components/ui/background-boxes";
 import motcaMascot from "@/assets/motca-mascot.png";
-import futuristicLandscape from "@/assets/motca-futuristic-landscape.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -67,17 +67,30 @@ const getWhatsAppHref = (message: string) =>
 function Landing() {
   const [activeNode, setActiveNode] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const storedTheme = window.localStorage.getItem("motca-theme");
+    if (storedTheme) return storedTheme === "dark";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+    window.localStorage.setItem("motca-theme", darkMode ? "dark" : "light");
+  }, [darkMode]);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
-      <div className="fixed inset-0 -z-50 bg-navy-deep" aria-hidden="true">
+      <div className="fixed inset-0 -z-50 overflow-hidden bg-background" aria-hidden="true">
+        <Boxes className="opacity-[0.14] dark:opacity-[0.24]" />
         <img
           src={motcaMascot}
           alt=""
-          className="h-full w-full object-cover opacity-20 saturate-125"
+          className="absolute inset-0 h-full w-full object-cover opacity-[0.08] saturate-125 dark:opacity-[0.06]"
         />
-        <BackgroundBeams className="opacity-45 mix-blend-screen [mask-image:linear-gradient(180deg,transparent_0%,black_12%,black_78%,transparent_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.16),transparent_46%),linear-gradient(180deg,oklch(0.2_0.07_260/0.58),oklch(0.985_0.01_240/0.88)_42%,oklch(0.985_0.01_240/0.94))]" />
+        <BackgroundBeams className="opacity-30 mix-blend-screen dark:opacity-50 [mask-image:linear-gradient(180deg,transparent_0%,black_12%,black_78%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.18),transparent_46%),linear-gradient(180deg,oklch(1_0_0/0.88),oklch(0.985_0.01_240/0.84)_42%,oklch(0.985_0.01_240/0.92))] dark:bg-[radial-gradient(ellipse_at_top,oklch(0.74_0.18_155/0.11),transparent_48%),radial-gradient(ellipse_at_bottom_right,oklch(0.62_0.2_250/0.16),transparent_55%),linear-gradient(180deg,oklch(0.09_0.035_260/0.9),oklch(0.13_0.045_255/0.88)_42%,oklch(0.08_0.028_255/0.94))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_18%,var(--background)_92%)] opacity-45 dark:opacity-35" />
       </div>
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
@@ -87,7 +100,7 @@ function Landing() {
       />
 
       {/* NAV */}
-      <header className="sticky top-0 z-40 backdrop-blur-md bg-background/82 border-b border-border">
+      <header className="sticky top-0 z-40 border-b border-border bg-background/82 backdrop-blur-md dark:bg-background/78">
         <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
           <a href="#top" className="font-display font-bold text-navy text-lg tracking-tight">
             MOTCA
@@ -98,9 +111,12 @@ function Landing() {
             <a href="#paths" className="hover:text-electric transition-colors">Vías</a>
             <a href="#form" className="hover:text-electric transition-colors">Diagnóstico</a>
           </nav>
-          <a href="#form" className="hidden md:inline-flex px-4 py-2 rounded-lg bg-navy text-primary-foreground text-sm font-medium hover:bg-navy-deep transition-colors">
-            Solicitar diagnóstico
-          </a>
+          <div className="hidden items-center gap-3 md:flex">
+            <a href="#form" className="inline-flex rounded-lg bg-navy px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-navy-deep">
+              Solicitar diagnóstico
+            </a>
+            <ThemeToggle darkMode={darkMode} onToggle={() => setDarkMode((v) => !v)} />
+          </div>
           <button
             className="md:hidden p-2 text-navy"
             aria-label="Menu"
@@ -124,6 +140,7 @@ function Landing() {
                 <a href="#origin" onClick={() => setMenuOpen(false)}>Origen</a>
                 <a href="#paths" onClick={() => setMenuOpen(false)}>Vías</a>
                 <a href="#form" onClick={() => setMenuOpen(false)}>Diagnóstico</a>
+                <ThemeToggle darkMode={darkMode} onToggle={() => setDarkMode((v) => !v)} className="mt-1" />
               </div>
             </motion.nav>
           )}
@@ -132,7 +149,7 @@ function Landing() {
 
       {/* HERO */}
       <section id="top" className="relative overflow-hidden">
-          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.14),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.12),transparent_55%),linear-gradient(180deg,oklch(1_0_0/0.86),oklch(1_0_0/0.72))]" />
+          <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.14),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.12),transparent_55%),linear-gradient(180deg,oklch(1_0_0/0.8),oklch(1_0_0/0.62))] dark:bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.16),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.1),transparent_55%),linear-gradient(180deg,oklch(0.09_0.035_260/0.76),oklch(0.1_0.035_255/0.58))]" />
           <div className="max-w-7xl mx-auto px-5 py-14 md:py-18 lg:py-20">
             <div className="grid items-center gap-10 md:grid-cols-[minmax(0,0.95fr)_minmax(360px,1.05fr)] xl:gap-14">
             <motion.div
@@ -265,6 +282,27 @@ function Landing() {
   );
 }
 
+function ThemeToggle({
+  darkMode,
+  onToggle,
+  className = "",
+}: {
+  darkMode: boolean;
+  onToggle: () => void;
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={darkMode ? "Activar modo claro" : "Activar modo oscuro"}
+      onClick={onToggle}
+      className={`inline-flex h-10 w-10 items-center justify-center rounded-lg border border-border bg-card text-navy shadow-sm shadow-navy/5 transition-all hover:border-electric hover:text-electric dark:shadow-black/20 ${className}`}
+    >
+      {darkMode ? <Sun className="h-4 w-4" aria-hidden="true" /> : <Moon className="h-4 w-4" aria-hidden="true" />}
+    </button>
+  );
+}
+
 function Section({
   id,
   eyebrow,
@@ -281,10 +319,10 @@ function Section({
   tone?: "clean" | "mint" | "blue" | "form";
 }) {
   const toneClass = {
-    clean: "bg-white/82 backdrop-blur-[1px]",
-    mint: "bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.14),transparent_58%),linear-gradient(180deg,oklch(0.99_0.005_240/0.82),oklch(0.96_0.02_225/0.86))] backdrop-blur-[1px]",
-    blue: "bg-[linear-gradient(180deg,oklch(0.96_0.028_245/0.84),oklch(0.93_0.045_248/0.88))] backdrop-blur-[1px]",
-    form: "bg-[radial-gradient(ellipse_at_top_right,oklch(0.74_0.18_155/0.16),transparent_55%),linear-gradient(180deg,oklch(0.98_0.01_235/0.82),oklch(1_0_0/0.9))] backdrop-blur-[1px]",
+    clean: "bg-white/76 backdrop-blur-[1px] dark:bg-background/68",
+    mint: "bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.14),transparent_58%),linear-gradient(180deg,oklch(0.99_0.005_240/0.76),oklch(0.96_0.02_225/0.82))] backdrop-blur-[1px] dark:bg-[radial-gradient(ellipse_at_top_left,oklch(0.74_0.18_155/0.12),transparent_58%),linear-gradient(180deg,oklch(0.11_0.04_255/0.72),oklch(0.13_0.045_255/0.78))]",
+    blue: "bg-[linear-gradient(180deg,oklch(0.96_0.028_245/0.78),oklch(0.93_0.045_248/0.84))] backdrop-blur-[1px] dark:bg-[linear-gradient(180deg,oklch(0.12_0.045_250/0.74),oklch(0.1_0.036_255/0.82))]",
+    form: "bg-[radial-gradient(ellipse_at_top_right,oklch(0.74_0.18_155/0.16),transparent_55%),linear-gradient(180deg,oklch(0.98_0.01_235/0.76),oklch(1_0_0/0.86))] backdrop-blur-[1px] dark:bg-[radial-gradient(ellipse_at_top_right,oklch(0.74_0.18_155/0.11),transparent_55%),linear-gradient(180deg,oklch(0.1_0.035_255/0.74),oklch(0.08_0.028_255/0.84))]",
   }[tone];
 
   return (
@@ -314,25 +352,25 @@ function SectionDivider({
 }) {
   const styles = {
     heroToModel: {
-      base: "from-white/72 via-sky-100/52 to-white/82",
+      base: "from-white/72 via-sky-100/52 to-white/82 dark:from-background/78 dark:via-cyan-950/32 dark:to-background/72",
       aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.62_0.2_250/0.34),transparent_64%)]",
       beam: "from-transparent via-electric/80 to-transparent",
       shard: "from-electric/0 via-electric/18 to-motca-green/0",
     },
     modelToOrigin: {
-      base: "from-white/82 via-emerald-50/62 to-sky-50/76",
+      base: "from-white/82 via-emerald-50/62 to-sky-50/76 dark:from-background/72 dark:via-emerald-950/30 dark:to-sky-950/24",
       aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.3),transparent_66%)]",
       beam: "from-transparent via-motca-green/80 to-transparent",
       shard: "from-motca-green/0 via-motca-green/18 to-electric/0",
     },
     originToPaths: {
-      base: "from-sky-50/76 via-cyan-50/66 to-blue-100/54",
+      base: "from-sky-50/76 via-cyan-50/66 to-blue-100/54 dark:from-sky-950/24 dark:via-cyan-950/28 dark:to-background/70",
       aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.62_0.2_250/0.3),transparent_64%)]",
       beam: "from-transparent via-electric/75 to-transparent",
       shard: "from-electric/0 via-cyan-300/22 to-electric/0",
     },
     pathsToForm: {
-      base: "from-blue-100/54 via-emerald-50/56 to-white/84",
+      base: "from-blue-100/54 via-emerald-50/56 to-white/84 dark:from-background/70 dark:via-emerald-950/30 dark:to-background/78",
       aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.3),transparent_64%)]",
       beam: "from-transparent via-motca-green/80 to-transparent",
       shard: "from-motca-green/0 via-cyan-300/22 to-electric/0",
@@ -366,7 +404,7 @@ function SectionDivider({
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 1, ease: "easeOut" }}
       />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,white/52,transparent_42%,white/45)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(1_0_0/0.52),transparent_42%,oklch(1_0_0/0.45))] dark:bg-[linear-gradient(180deg,oklch(0.08_0.028_255/0.5),transparent_42%,oklch(0.08_0.028_255/0.46))]" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
     </div>
   );
@@ -531,7 +569,7 @@ function DiagnosticForm() {
   if (done) {
     return (
       <BackgroundLines
-        className="relative min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5"
+        className="relative min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5 dark:bg-card dark:shadow-black/30"
         svgOptions={{ duration: 8 }}
       >
         <motion.div
@@ -540,7 +578,7 @@ function DiagnosticForm() {
           transition={{ duration: 0.5 }}
           className="relative z-20 flex min-h-[28rem] flex-col justify-center px-7 py-10 text-center md:px-12"
         >
-          <div className="absolute inset-0 -z-10 rounded-full bg-white/70 blur-3xl" />
+          <div className="absolute inset-0 -z-10 rounded-full bg-white/70 blur-3xl dark:bg-background/70" />
           <motion.div
             initial={{ scale: 0, rotate: -45 }}
             animate={{ scale: 1, rotate: 0 }}
@@ -564,13 +602,13 @@ function DiagnosticForm() {
               href={getWhatsAppHref("Hola MOTCA, ya envié mi diagnóstico y quiero agendar una demo.")}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify-center rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-navy/20 transition-colors hover:bg-navy-deep"
+              className="inline-flex items-center justify-center rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-navy/20 transition-colors hover:bg-navy-deep"
             >
               {staticFallback ? "Enviar por WhatsApp" : "Agendar una demo"}
             </a>
             <a
               href="#top"
-              className="inline-flex items-center justify-center rounded-lg border border-border bg-white px-5 py-3 text-sm font-semibold text-navy transition-colors hover:border-electric hover:text-electric"
+              className="inline-flex items-center justify-center rounded-lg border border-border bg-white px-5 py-3 text-sm font-semibold text-navy transition-colors hover:border-electric hover:text-electric dark:bg-background/70"
             >
               Volver al inicio
             </a>
@@ -581,13 +619,13 @@ function DiagnosticForm() {
   }
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/75 bg-white/82 shadow-2xl shadow-navy/14 backdrop-blur-xl">
+    <div className="relative overflow-hidden rounded-2xl border border-white/75 bg-white/82 shadow-2xl shadow-navy/14 backdrop-blur-xl dark:border-white/10 dark:bg-card/82 dark:shadow-black/35">
       <GlowingEffect spread={58} glow disabled={false} proximity={140} inactiveZone={0.01} borderWidth={1.5} />
       <BackgroundBeams className="opacity-20 mix-blend-screen [mask-image:radial-gradient(ellipse_at_center,black_24%,transparent_74%)]" />
       <div className="relative z-10 grid lg:grid-cols-[0.9fr_1.1fr]">
         <FuturisticLandscapePanel />
 
-        <form onSubmit={submit} className="space-y-5 bg-white/88 p-6 text-navy-deep md:p-9 lg:p-10">
+        <form onSubmit={submit} className="space-y-5 bg-white/88 p-6 text-navy-deep md:p-9 lg:p-10 dark:bg-card/88">
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="Nombre completo">
               <input className={inputCls} value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} maxLength={120} />
@@ -657,7 +695,7 @@ function DiagnosticForm() {
             whileTap={{ scale: submitting ? 1 : 0.98 }}
             type="submit"
             disabled={submitting}
-            className="relative w-full overflow-hidden rounded-lg bg-navy px-7 py-3.5 font-semibold text-white shadow-lg shadow-navy/15 transition-colors hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+            className="relative w-full overflow-hidden rounded-lg bg-navy px-7 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-navy/15 transition-colors hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
           >
             <GlowingEffect spread={30} glow disabled={false} proximity={72} inactiveZone={0.01} borderWidth={1.2} />
             {submitting ? "Enviando…" : "Enviar diagnóstico"}
@@ -673,28 +711,47 @@ function FuturisticLandscapePanel() {
     <aside
       className="relative z-20 hidden min-h-[34rem] overflow-hidden bg-[#06090d] text-white lg:block"
     >
-      <img
-        src={futuristicLandscape}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover object-[50%_64%]"
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_34%,oklch(0.74_0.18_155/0.18),transparent_28%),radial-gradient(ellipse_at_35%_72%,oklch(0.62_0.2_250/0.28),transparent_42%),linear-gradient(180deg,oklch(0.1_0.05_250),oklch(0.05_0.03_260))]" />
+      <Boxes
+        className="left-[38%] top-[34%] z-10 opacity-[0.55]"
+        rows={54}
+        cols={44}
+        colors={["#38bdf8", "#22c55e", "#14b8a6", "#818cf8", "#a7f3d0"]}
+        lineClassName="border-cyan-200/16"
       />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_12%,oklch(0.1_0.04_255/0.12)_56%,oklch(0.06_0.03_260/0.58)_100%)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,oklch(0.06_0.03_260/0.42),transparent_30%,transparent_70%,oklch(0.06_0.03_260/0.54))]" />
-      <BackgroundBeams className="opacity-22 mix-blend-screen [mask-image:linear-gradient(90deg,black,black_82%,transparent)]" />
+      <BackgroundBeams className="z-10 opacity-[0.34] mix-blend-screen [mask-image:linear-gradient(90deg,black,black_84%,transparent)]" />
+      <div className="absolute inset-0 z-20 bg-[linear-gradient(90deg,oklch(0.06_0.03_260/0.76),transparent_34%,transparent_66%,oklch(0.06_0.03_260/0.72))]" />
       <motion.div
-        className="absolute left-1/2 top-[58%] h-px w-[76%] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/85 to-transparent shadow-[0_0_34px_oklch(0.74_0.18_155/0.42)]"
+        className="absolute left-1/2 top-[62%] z-30 h-px w-[76%] -translate-x-1/2 bg-gradient-to-r from-transparent via-white/85 to-transparent shadow-[0_0_34px_oklch(0.74_0.18_155/0.42)]"
         initial={{ scaleX: 0.35, opacity: 0 }}
         whileInView={{ scaleX: 1, opacity: 0.9 }}
         viewport={{ once: true }}
         transition={{ duration: 0.9, ease: "easeOut" }}
       />
-      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-navy-deep/70 to-transparent" />
+      <div className="absolute inset-x-0 top-0 z-40 flex h-[min(42rem,100vh)] items-center justify-center p-8">
+        <motion.div
+          initial={{ opacity: 0, y: 18, scale: 0.98 }}
+          whileInView={{ opacity: 1, y: 0, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+          className="relative max-w-sm rounded-lg border border-white/14 bg-[#06111f]/68 px-8 py-7 text-center shadow-2xl shadow-black/35 backdrop-blur-md"
+        >
+          <GlowingEffect spread={40} glow disabled={false} proximity={100} inactiveZone={0.01} borderWidth={1.2} />
+          <div className="mb-5 text-[0.68rem] font-mono font-semibold tracking-[0.42em] text-motca-green">
+            MOTCA
+          </div>
+          <p className="font-display text-2xl font-semibold leading-tight text-white">
+            "Activa una forma de pensar que viaja contigo, aunque la tecnología cambie."
+          </p>
+        </motion.div>
+      </div>
+      <div className="absolute inset-x-0 bottom-0 z-30 h-32 bg-gradient-to-t from-[#05070f] via-[#05070f]/80 to-transparent" />
     </aside>
   );
 }
 
 const inputCls =
-  "relative z-10 w-full rounded-lg border border-border bg-white/78 px-4 py-3 text-navy-deep outline-none transition-all placeholder:text-muted-foreground focus:border-motca-green focus:bg-white focus:ring-2 focus:ring-motca-green/20 [&>option]:bg-white [&>option]:text-navy-deep";
+  "relative z-10 w-full rounded-lg border border-border bg-white/78 px-4 py-3 text-navy-deep outline-none transition-all placeholder:text-muted-foreground focus:border-motca-green focus:bg-white focus:ring-2 focus:ring-motca-green/20 dark:bg-background/56 dark:focus:bg-background/76 [&>option]:bg-white [&>option]:text-navy-deep dark:[&>option]:bg-background dark:[&>option]:text-foreground";
 
 function Field({ label, children, className = "" }: { label: string; children: React.ReactNode; className?: string }) {
   return (
@@ -725,7 +782,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
       className={`relative overflow-hidden px-4 py-2 rounded-md text-sm font-medium border transition-all ${
         active
           ? "bg-motca-green text-navy-deep border-motca-green"
-          : "bg-white/70 text-navy-deep border-border hover:border-motca-green hover:bg-white"
+          : "bg-white/70 text-navy-deep border-border hover:border-motca-green hover:bg-white dark:bg-background/48 dark:hover:bg-background/74"
       }`}
     >
       <GlowingEffect spread={24} glow disabled={false} proximity={56} inactiveZone={0.01} borderWidth={1} />
