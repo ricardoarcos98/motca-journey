@@ -435,8 +435,8 @@ const revealThemes = [
     speed: 4,
     colors: [[20, 149, 255], [16, 185, 129]],
     dotSize: 2,
-    background: "!bg-navy-deep",
-    veil: "bg-navy-deep/45",
+    background: "!bg-[oklch(0.20_0.07_260)]",
+    veil: "bg-[oklch(0.08_0.04_260)]/70",
   },
   {
     speed: 3.5,
