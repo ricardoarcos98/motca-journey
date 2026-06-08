@@ -161,7 +161,13 @@ function Landing() {
                 <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-motca-green">
                   <span>Eso es</span>
                   <LayoutTextFlip
-                    words={["MOTCA", "soñadores", "transformadores", "innovadores"]}
+                    words={[
+                      "MOTCA",
+                      "soñadores",
+                      "transformadores",
+                      "innovadores",
+                      "Educación",
+                    ]}
                   />
                 </span>
               </h1>
@@ -740,7 +746,6 @@ function FuturisticLandscapePanel() {
           </p>
         </motion.div>
       </div>
-      <div className="absolute inset-x-0 bottom-0 z-30 h-32 bg-gradient-to-t from-[#05070f] via-[#05070f]/80 to-transparent" />
     </aside>
   );
 }
