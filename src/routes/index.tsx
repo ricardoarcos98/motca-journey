@@ -576,30 +576,33 @@ function DiagnosticForm() {
   if (done) {
     return (
       <BackgroundLines
-        className="relative min-h-[28rem] overflow-hidden rounded-2xl border border-motca-green/40 bg-white text-left shadow-xl shadow-navy/5 dark:bg-card dark:shadow-black/30"
+        className="relative flex min-h-[34rem] items-center justify-center overflow-hidden rounded-2xl border border-motca-green/35 bg-white/88 p-5 text-left shadow-xl shadow-navy/5 dark:bg-card/88 dark:shadow-black/30 sm:p-8"
         svgOptions={{ duration: 8 }}
       >
         <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="relative z-20 flex min-h-[28rem] flex-col justify-center px-7 py-10 text-center md:px-12"
+          initial={{ opacity: 0, y: 22, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          whileHover={{ y: -8, scale: 1.015 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="group relative z-20 w-full max-w-xl overflow-hidden rounded-2xl border border-white/80 bg-white/92 px-7 py-9 text-center shadow-2xl shadow-navy/12 backdrop-blur-xl transition-shadow duration-300 hover:shadow-motca-green/18 dark:border-white/10 dark:bg-background/86 dark:shadow-black/35 sm:px-10 sm:py-11"
         >
-          <div className="absolute inset-0 -z-10 rounded-full bg-white/70 blur-3xl dark:bg-background/70" />
+          <GlowingEffect spread={64} glow disabled={false} proximity={150} inactiveZone={0.01} borderWidth={1.4} />
+          <div className="absolute -top-28 left-1/2 -z-10 h-56 w-56 -translate-x-1/2 rounded-full bg-motca-green/18 blur-3xl transition-opacity duration-300 group-hover:opacity-100 dark:bg-motca-green/12" />
+          <div className="absolute inset-x-10 top-0 -z-10 h-px bg-gradient-to-r from-transparent via-motca-green/60 to-transparent" />
           <motion.div
             initial={{ scale: 0, rotate: -45 }}
             animate={{ scale: 1, rotate: 0 }}
-            transition={{ type: "spring", delay: 0.1 }}
-            className="w-16 h-16 mx-auto rounded-full bg-motca-green flex items-center justify-center text-white shadow-lg shadow-motca-green/30"
+            transition={{ type: "spring", delay: 0.1, bounce: 0.45 }}
+            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-motca-green text-white shadow-lg shadow-motca-green/30 ring-8 ring-motca-green/10 transition-transform duration-300 group-hover:scale-105"
           >
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="20 6 9 17 4 12" />
             </svg>
           </motion.div>
-          <h3 className="mt-6 text-2xl md:text-3xl font-bold text-navy-deep">
+          <h3 className="mt-6 font-display text-2xl font-bold leading-tight text-navy-deep dark:text-white md:text-3xl">
             Ya estás en lista de espera
           </h3>
-          <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
+          <p className="mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted-foreground sm:text-base">
             Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo.
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
