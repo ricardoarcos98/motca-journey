@@ -1,9 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Moon, Sun } from "lucide-react";
-import { submitDiagnostic } from "@/lib/diagnostic.functions";
 import GlobeDemo from "@/components/globe-demo";
 import { CanvasRevealEffect } from "@/components/ui/canvas-reveal-effect";
 import { GlowingEffect } from "@/components/ui/glowing-effect";
@@ -11,6 +9,7 @@ import { BackgroundLines } from "@/components/ui/background-lines";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { LayoutTextFlip } from "@/components/ui/layout-text-flip";
 import { Vortex } from "@/components/ui/vortex";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -515,7 +514,6 @@ function RevealPathCard({ path, index }: { path: string; index: number }) {
 
 function DiagnosticForm() {
   const [done, setDone] = useState(false);
-  const [staticFallback, setStaticFallback] = useState(false);
   const [data, setData] = useState({
     name: "", phone: "", role: "", email: "",
     path: "",
@@ -527,7 +525,6 @@ function DiagnosticForm() {
   });
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const send = useServerFn(submitDiagnostic);
 
   const toggle = (key: "learn" | "features", value: string) => {
     setData((d) => ({
@@ -546,26 +543,31 @@ function DiagnosticForm() {
     if (!data.path) return setError("Selecciona una vía de expansión.");
     if (!data.terrain) return setError("Selecciona un terreno.");
 
-    const isGitHubPages =
-      typeof window !== "undefined" && window.location.hostname.endsWith("github.io");
-
     setSubmitting(true);
     try {
-      if (isGitHubPages) {
-        window.localStorage.setItem(
-          "motca-diagnostic-draft",
-          JSON.stringify({ ...data, createdAt: new Date().toISOString() }),
-        );
-        setStaticFallback(true);
-        setDone(true);
-        return;
+      const { error: insertError } = await supabase
+        .from("diagnostic_submissions")
+        .insert({
+          name: data.name.trim(),
+          phone: data.phone.trim(),
+          role: data.role.trim(),
+          email: data.email.trim(),
+          path: data.path,
+          terrain: data.terrain,
+          learn: data.learn,
+          features: data.features,
+          duolingo: data.duolingo || null,
+          comment: data.comment.trim() || null,
+        });
+
+      if (insertError) {
+        throw insertError;
       }
 
-      await send({ data });
       setDone(true);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "No pudimos enviar tu solicitud.";
-      setError(msg);
+      console.error("[diagnostic_submissions] insert failed", err);
+      setError("No pudimos guardar tu solicitud. Inténtalo de nuevo o escríbenos por WhatsApp.");
     } finally {
       setSubmitting(false);
     }
@@ -595,12 +597,10 @@ function DiagnosticForm() {
             </svg>
           </motion.div>
           <h3 className="mt-6 text-2xl md:text-3xl font-bold text-navy-deep">
-            {staticFallback ? "Tu diagnóstico quedó preparado" : "Ya estás en lista de espera"}
+            Ya estás en lista de espera
           </h3>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            {staticFallback
-              ? "GitHub Pages publica esta landing como sitio estático. Para dejar tus datos y avanzar, agenda una demo por WhatsApp y comparte tu diagnóstico."
-              : "Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo."}
+            Recibimos tu información. Te tendremos en cuenta para las próximas aperturas del diagnóstico de entrada MOTCA y te orientaremos sobre tu punto de partida en el modelo.
           </p>
           <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <a
@@ -609,7 +609,7 @@ function DiagnosticForm() {
               rel="noreferrer"
               className="inline-flex items-center justify-center rounded-lg bg-navy px-5 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-navy/20 transition-colors hover:bg-navy-deep"
             >
-              {staticFallback ? "Enviar por WhatsApp" : "Agendar una demo"}
+              Agendar una demo
             </a>
             <a
               href="#top"

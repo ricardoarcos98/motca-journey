@@ -35,6 +35,9 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build
+        env:
+          VITE_SUPABASE_URL: https://kpzmnggkrfwjkynxjmrz.supabase.co
+          VITE_SUPABASE_PUBLISHABLE_KEY: sb_publishable_XnbI3ET5RPemiDB0sLYe8A_P928PNFX
         run: npm run build
 
       - name: Disable Jekyll
