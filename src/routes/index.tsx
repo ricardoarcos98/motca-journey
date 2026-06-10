@@ -23,11 +23,55 @@ export const Route = createFileRoute("/")({
   component: Landing,
 });
 
-const nodes = [
-  { n: "01", title: "Fonema de la Mente", desc: "Fundamentos del pensamiento digital." },
-  { n: "02", title: "Sintaxis del Pensamiento", desc: "Estructura, conexión y flujo." },
-  { n: "03", title: "Lectura Fluida", desc: "Independencia analítica y reconocimiento de patrones." },
-  { n: "04", title: "Escritura Propia", desc: "Creación de soluciones propias con criterio." },
+const modelNodes = [
+  {
+    n: "N1",
+    node: "01",
+    label: "El Fonema",
+    title: "Fonema de la Mente",
+    tagline: "Fundamentos del pensamiento digital.",
+    desc: "Te enseñaron a aislar el sonido y la existencia de cada letra. Aprendiste a reconocer las piezas mínimas de forma individual.",
+    colors: [[16, 185, 129], [52, 211, 153]],
+    speed: 4.2,
+    accent: "from-emerald-400/35 via-teal-500/15 to-transparent",
+    canvasBg: "!bg-[oklch(0.17_0.07_255)]",
+  },
+  {
+    n: "N2",
+    node: "02",
+    label: "La Sintaxis",
+    title: "Sintaxis del Pensamiento",
+    tagline: "Estructura, conexión y flujo.",
+    desc: "Una vez que comprendiste los fonemas, tus maestros te guiaron para unirlos. Aprendiste cómo una letra se conecta con otra para formar palabras, y cómo esas palabras se estructuran en oraciones con un sentido lógico y armónico.",
+    colors: [[20, 149, 255], [99, 102, 241]],
+    speed: 3.6,
+    accent: "from-sky-400/35 via-indigo-500/18 to-transparent",
+    canvasBg: "!bg-[oklch(0.15_0.08_260)]",
+  },
+  {
+    n: "N3",
+    node: "03",
+    label: "La Lectura Fluida",
+    title: "Lectura Fluida",
+    tagline: "Independencia analítica y reconocimiento de patrones.",
+    desc: "Gracias a ese orden conceptual, un día te paraste frente a un texto completamente nuevo y lograste descifrarlo de corrido. Tu mente ya había asimilado el método, otorgándote la libertad de comprender cualquier libro de forma autónoma.",
+    colors: [[125, 211, 252], [34, 211, 238]],
+    speed: 3.2,
+    accent: "from-cyan-300/35 via-blue-500/15 to-transparent",
+    canvasBg: "!bg-[oklch(0.14_0.07_250)]",
+  },
+  {
+    n: "N4",
+    node: "04",
+    label: "La Escritura Propia",
+    title: "Escritura Propia",
+    tagline: "Creación de soluciones propias con criterio.",
+    desc: "El momento exacto en el que tomaste el lápiz para plasmar tus propias ideas, crear tus historias y generar un impacto real en tu entorno.",
+    colors: [[250, 204, 21], [45, 212, 191]],
+    speed: 4.8,
+    accent: "from-amber-300/30 via-emerald-400/18 to-transparent",
+    canvasBg: "!bg-[oklch(0.16_0.06_255)]",
+  },
 ];
 
 const terrains = ["Docentes", "Empresas", "Jóvenes 13-18", "Emprendedores", "Técnicos y salud"];
@@ -63,8 +107,14 @@ const whatsappNumber = "573128438532";
 const getWhatsAppHref = (message: string) =>
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
+const PAGE_CONTAINER = "mx-auto w-full max-w-6xl px-5 sm:px-6";
+
+const fastEase = [0.16, 1, 0.3, 1] as const;
+const fastSpring = { type: "spring" as const, stiffness: 720, damping: 40, mass: 0.35 };
+const brandCardShell =
+  "relative overflow-hidden rounded-2xl border border-electric/25 bg-navy shadow-xl shadow-electric/15";
+
 function Landing() {
-  const [activeNode, setActiveNode] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -94,13 +144,13 @@ function Landing() {
 
       {/* NAV */}
       <header className="sticky top-0 z-40 border-b border-border bg-background/82 backdrop-blur-md dark:bg-background/78">
-        <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+        <div className={`${PAGE_CONTAINER} py-4 flex items-center justify-between`}>
           <a href="#top" className="font-display font-bold text-navy text-lg tracking-tight">
             MOTCA
           </a>
           <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-navy">
-            <a href="#model" className="hover:text-electric transition-colors">Modelo</a>
             <a href="#origin" className="hover:text-electric transition-colors">Origen</a>
+            <a href="#model" className="hover:text-electric transition-colors">Modelo</a>
             <a href="#paths" className="hover:text-electric transition-colors">Vías</a>
             <a href="#form" className="hover:text-electric transition-colors">Diagnóstico</a>
           </nav>
@@ -129,8 +179,8 @@ function Landing() {
               className="md:hidden overflow-hidden border-t border-border bg-background"
             >
               <div className="px-5 py-4 flex flex-col gap-3 text-navy">
-                <a href="#model" onClick={() => setMenuOpen(false)}>Modelo</a>
                 <a href="#origin" onClick={() => setMenuOpen(false)}>Origen</a>
+                <a href="#model" onClick={() => setMenuOpen(false)}>Modelo</a>
                 <a href="#paths" onClick={() => setMenuOpen(false)}>Vías</a>
                 <a href="#form" onClick={() => setMenuOpen(false)}>Diagnóstico</a>
                 <ThemeToggle darkMode={darkMode} onToggle={() => setDarkMode((v) => !v)} className="mt-1" />
@@ -140,11 +190,12 @@ function Landing() {
         </AnimatePresence>
       </header>
 
+      <main>
       {/* HERO */}
       <section id="top" className="relative overflow-hidden">
           <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.14),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.12),transparent_55%),linear-gradient(180deg,oklch(1_0_0/0.8),oklch(1_0_0/0.62))] dark:bg-[radial-gradient(ellipse_at_top_right,oklch(0.62_0.20_250/0.16),transparent_60%),radial-gradient(ellipse_at_bottom_left,oklch(0.74_0.18_155/0.1),transparent_55%),linear-gradient(180deg,oklch(0.09_0.035_260/0.76),oklch(0.1_0.035_255/0.58))]" />
-          <div className="max-w-7xl mx-auto px-5 py-14 md:py-18 lg:py-20">
-            <div className="grid items-center gap-10 md:grid-cols-[minmax(0,0.95fr)_minmax(360px,1.05fr)] xl:gap-14">
+          <div className={`${PAGE_CONTAINER} py-14 md:py-20 lg:py-24`}>
+            <div className="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_minmax(320px,1fr)] lg:gap-14">
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
@@ -155,16 +206,20 @@ function Landing() {
                 <span className="w-1.5 h-1.5 rounded-full bg-motca-green animate-pulse" />
                 MODELO DE TRANSFERENCIA DE CAPACIDAD ADAPTATIVA
               </span>
-              <h1 className="mt-5 text-4xl md:text-5xl xl:text-6xl font-bold text-navy-deep leading-[1.05]">
-                Aprende a pensar <span className="text-electric">con la tecnología</span>, no a depender de ella.
-                <span className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-motca-green">
-                  <span>Eso es</span>
+              <h1 className="mt-5 text-4xl md:text-5xl xl:text-6xl font-bold text-navy-deep leading-[1.08]">
+                <span className="block">
+                  Aprende a pensar <span className="text-electric">con la tecnología</span>,
+                </span>
+                <span className="block">no a depender de ella.</span>
+                <span className="mt-3 inline-flex max-w-full flex-nowrap items-center gap-x-3 text-motca-green">
+                  <span className="shrink-0">Eso es</span>
                   <LayoutTextFlip
+                    className="shrink-0"
                     words={[
                       "MOTCA",
-                      "soñadores",
-                      "transformadores",
-                      "innovadores",
+                      "Soñadores",
+                      "Transformadores",
+                      "Innovadores",
                       "Educación",
                     ]}
                   />
@@ -177,8 +232,8 @@ function Landing() {
                 <a href="#form" className="px-6 py-3 rounded-lg bg-navy text-primary-foreground font-medium hover:bg-navy-deep transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-navy/20">
                   Solicitar diagnóstico
                 </a>
-                <a href="#model" className="px-6 py-3 rounded-lg border border-border bg-card text-navy font-medium hover:border-electric hover:text-electric transition-colors">
-                  Ver modelo
+                <a href="#origin" className="px-6 py-3 rounded-lg border border-border bg-card text-navy font-medium hover:border-electric hover:text-electric transition-colors">
+                  Conocer el origen
                 </a>
               </div>
             </motion.div>
@@ -195,68 +250,65 @@ function Landing() {
           </div>
       </section>
 
-      <SectionDivider variant="heroToModel" />
-
-      {/* MODEL NODES */}
-      <Section id="model" eyebrow="El modelo" title="Cuatro nodos. Un centro cognitivo." tone="clean">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {nodes.map((node, i) => (
-              <motion.button
-                key={node.n}
-                type="button"
-                onMouseEnter={() => setActiveNode(i)}
-                onFocus={() => setActiveNode(i)}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: i * 0.08 }}
-                whileHover={{ y: -4 }}
-                className={`relative overflow-hidden text-left p-6 rounded-lg bg-card border transition-all ${
-                  activeNode === i ? "border-electric shadow-lg shadow-electric/10" : "border-border"
-                }`}
-              >
-                <GlowingEffect spread={32} glow disabled={false} proximity={80} inactiveZone={0.01} borderWidth={1.4} />
-                <div className={`text-xs font-mono font-semibold mb-3 transition-colors ${activeNode === i ? "text-electric" : "text-muted-foreground"}`}>
-                  NODO {node.n}
-                </div>
-                <h3 className="text-lg font-semibold text-navy-deep">{node.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{node.desc}</p>
-              </motion.button>
-            ))}
-          </div>
-      </Section>
-
-
-      <SectionDivider variant="modelToOrigin" />
+      <SectionDivider variant="heroToOrigin" />
 
       {/* ORIGIN */}
-      <Section id="origin" eyebrow="Origen del modelo" title="La evolución de la autonomía" tone="mint">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              MOTCA replica el proceso natural de aprender a leer: primero se reconocen sonidos, luego se entiende la sintaxis, después se lee con fluidez y finalmente se escribe con autonomía. Esa misma lógica se aplica al aprendizaje de tecnología e IA.
-            </p>
-            <div className="space-y-3">
-              {["Reconocer", "Estructurar", "Leer", "Escribir"].map((step, i) => (
-                <motion.div
-                  key={step}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1 }}
-                  className="relative flex items-center gap-4 overflow-hidden p-4 rounded-lg bg-card border border-border"
-                >
-                  <GlowingEffect spread={32} glow disabled={false} proximity={80} inactiveZone={0.01} borderWidth={1.2} />
-                  <div className="w-10 h-10 rounded-md bg-gradient-to-br from-electric to-motca-green text-primary-foreground font-mono font-bold flex items-center justify-center">
-                    {i + 1}
-                  </div>
-                  <span className="font-display font-semibold text-navy-deep">{step}</span>
-                </motion.div>
-            ))}
-          </div>
+      <Section id="origin" eyebrow="El origen de MOTCA" title="La evolución de la autonomía" tone="mint">
+        <div className="mx-auto w-full max-w-3xl space-y-6 text-left">
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55 }}
+            className="text-lg text-muted-foreground leading-relaxed"
+          >
+            Piensa por un momento en tu infancia. Recuerda el día en que abriste un libro por primera vez. En ese momento, las páginas eran un conjunto de formas y trazos misteriosos — un código fascinante que sabías que contenía un gran valor, pero que aún no podías interpretar por ti mismo.
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, delay: 0.08 }}
+            className="text-lg text-muted-foreground leading-relaxed"
+          >
+            El proceso para dominarlo no ocurrió de la noche a la mañana, ni se dio a través de saltos cuánticos. Tus maestros sabían que para construir una habilidad para toda la vida, la mente humana necesita una secuencia natural y progresiva.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.22, delay: 0.08, ease: fastEase }}
+            className={`${brandCardShell} p-6 md:p-8`}
+          >
+            <BrandCardBackdrop accent="from-emerald-400/35 via-motca-green/18 to-transparent" />
+            <GlowingEffect spread={36} glow disabled={false} proximity={80} inactiveZone={0.01} borderWidth={1.2} />
+            <div className="relative z-10">
+              <span className="inline-flex rounded-md bg-gradient-to-br from-electric to-motca-green px-2.5 py-1 font-mono text-xs font-bold text-primary-foreground shadow-md shadow-electric/30">
+                MOTCA
+              </span>
+              <p className="mt-4 text-lg leading-relaxed text-white/85">
+                Nace precisamente para replicar este viaje natural y evolutivo dentro de la transformación digital y la toma de decisiones inteligentes. En lugar de enfocarse en la memorización de interfaces temporales, este modelo estructura tu cerebro para que domines la lógica profunda de los datos, la analítica de negocios y la gobernanza. Es el chasis intelectual que te devuelve la brújula estratégica y la total soberanía cognitiva para dirigir con absoluta claridad cualquier entorno tecnológico, presente o futuro.
+              </p>
+            </div>
+          </motion.div>
         </div>
       </Section>
 
-      <SectionDivider variant="originToPaths" />
+      <SectionDivider variant="originToModel" />
+
+      {/* MODEL NODES */}
+      <Section
+        id="model"
+        eyebrow="El modelo"
+        title="Cuatro nodos. Un centro cognitivo."
+        subtitle="La misma secuencia natural del aprendizaje, ahora aplicada a tu autonomía digital."
+        tone="clean"
+        contentClassName="mx-auto max-w-5xl"
+      >
+        <ModelNodesShowcase />
+      </Section>
+
+      <SectionDivider variant="modelToPaths" />
 
       {/* PATHS */}
       <Section id="paths" eyebrow="Vías" title="Vías de expansión" tone="blue">
@@ -270,14 +322,22 @@ function Landing() {
       <SectionDivider variant="pathsToForm" />
 
       {/* FORM */}
-      <Section id="form" eyebrow="Diagnóstico" title="Solicita tu diagnóstico de entrada" subtitle="Una entrevista estructurada para identificar tu punto de partida en el modelo MOTCA." tone="form">
+      <Section
+        id="form"
+        eyebrow="Diagnóstico"
+        title="Solicita tu diagnóstico de entrada"
+        subtitle="Una entrevista estructurada para identificar tu punto de partida en el modelo MOTCA."
+        tone="form"
+        contentClassName="mx-auto max-w-5xl"
+      >
         <DiagnosticForm />
       </Section>
 
       <WhatsAppFeedbackButton />
+      </main>
 
       <footer className="border-t border-border mt-12">
-        <div className="max-w-6xl mx-auto px-5 py-8 flex flex-wrap items-center justify-between gap-4 text-sm text-muted-foreground">
+        <div className={`${PAGE_CONTAINER} py-8 flex flex-col items-center justify-center gap-3 text-center text-sm text-muted-foreground sm:flex-row sm:justify-between sm:text-left`}>
           <div className="font-display font-semibold text-navy-deep">MOTCA</div>
           <p>© {new Date().getFullYear()} Modelo de Transferencia de Capacidad Adaptativa.</p>
         </div>
@@ -307,6 +367,124 @@ function ThemeToggle({
   );
 }
 
+function BrandCardBackdrop({ accent }: { accent: string }) {
+  return (
+    <div className="absolute inset-0" aria-hidden="true">
+      <div className="absolute inset-0 bg-gradient-to-br from-navy/88 via-[oklch(0.18_0.08_260)]/72 to-[oklch(0.13_0.06_255)]/90" />
+      <div className={`absolute inset-0 bg-gradient-to-tr ${accent}`} />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,oklch(0.62_0.2_250/0.22),transparent_58%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,oklch(0.74_0.18_155/0.18),transparent_52%)]" />
+    </div>
+  );
+}
+
+function ModelNodesShowcase() {
+  const [activeNode, setActiveNode] = useState(0);
+  const active = modelNodes[activeNode];
+
+  return (
+    <div className="relative w-full">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-64 max-w-3xl bg-[radial-gradient(ellipse_at_top,oklch(0.62_0.2_250/0.14),transparent_68%)] dark:bg-[radial-gradient(ellipse_at_top,oklch(0.62_0.2_250/0.1),transparent_68%)]"
+      />
+
+      <div className="relative mb-8">
+        <div className="relative hidden h-1 overflow-hidden rounded-full bg-border/80 md:block">
+          <motion.div
+            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-electric via-motca-green to-electric"
+            animate={{ width: `${((activeNode + 1) / modelNodes.length) * 100}%` }}
+            transition={{ duration: 0.16, ease: fastEase }}
+          />
+        </div>
+
+        <div className="relative mt-0 grid grid-cols-2 gap-2 md:mt-5 md:grid-cols-4 md:gap-3">
+          {modelNodes.map((node, i) => {
+            const isActive = activeNode === i;
+            return (
+              <motion.button
+                key={node.n}
+                type="button"
+                onClick={() => setActiveNode(i)}
+                onMouseEnter={() => setActiveNode(i)}
+                onFocus={() => setActiveNode(i)}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.2, delay: i * 0.03 }}
+                whileHover={{ y: -2 }}
+                className={`relative overflow-hidden rounded-xl border p-4 text-left transition-all md:p-5 ${
+                  isActive
+                    ? "border-electric/50 bg-card shadow-lg shadow-electric/12 ring-1 ring-electric/20"
+                    : "border-border bg-card/70 hover:border-electric/30 hover:bg-card"
+                }`}
+              >
+                <div
+                  className={`absolute inset-0 bg-gradient-to-br from-electric/8 via-transparent to-motca-green/10 transition-opacity duration-100 ${
+                    isActive ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+                <GlowingEffect spread={30} glow={isActive} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={1.2} />
+                <div className="relative z-10">
+                  <div className={`font-mono text-xs font-bold transition-colors ${isActive ? "text-electric" : "text-muted-foreground"}`}>
+                    {node.n}
+                  </div>
+                  <div className={`mt-2 font-display text-sm font-semibold leading-tight md:text-base ${isActive ? "text-navy-deep" : "text-navy-deep/80"}`}>
+                    {node.label}
+                  </div>
+                </div>
+              </motion.button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className={`${brandCardShell} h-[20rem]`}>
+        <div className="absolute inset-0" aria-hidden="true">
+          <CanvasRevealEffect
+            key={active.n}
+            animationSpeed={active.speed}
+            colors={active.colors}
+            containerClassName={active.canvasBg}
+            dotSize={2}
+            showGradient={false}
+          />
+          <BrandCardBackdrop accent={active.accent} />
+        </div>
+
+        <GlowingEffect spread={42} glow disabled={false} proximity={96} inactiveZone={0.01} borderWidth={1.4} />
+
+        <div className="relative z-10 flex h-full flex-col items-center justify-center p-7 text-center md:p-10">
+          <motion.div
+            key={active.n}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.08, ease: fastEase }}
+          >
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <span className="inline-flex rounded-md bg-gradient-to-br from-electric to-motca-green px-2.5 py-1 font-mono text-xs font-bold text-primary-foreground shadow-md shadow-electric/30">
+                NODO {active.node}
+              </span>
+              <span className="text-xs font-mono font-semibold tracking-widest text-sky-200 uppercase">
+                {active.label}
+              </span>
+            </div>
+            <h3 className="mt-4 font-display text-2xl font-bold text-white md:text-3xl">
+              {active.title}
+            </h3>
+            <p className="mt-2 text-sm font-medium text-motca-green md:text-base">
+              {active.tagline}
+            </p>
+            <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-white/82 md:text-lg">
+              {active.desc}
+            </p>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function Section({
   id,
   eyebrow,
@@ -314,6 +492,7 @@ function Section({
   subtitle,
   children,
   tone = "clean",
+  contentClassName = "",
 }: {
   id?: string;
   eyebrow: string;
@@ -321,6 +500,7 @@ function Section({
   subtitle?: string;
   children: React.ReactNode;
   tone?: "clean" | "mint" | "blue" | "form";
+  contentClassName?: string;
 }) {
   const toneClass = {
     clean: "bg-white/76 backdrop-blur-[1px] dark:bg-background/68",
@@ -331,85 +511,113 @@ function Section({
 
   return (
     <section id={id} className={`relative overflow-hidden py-16 md:py-24 ${toneClass}`}>
-      <div className="relative z-10 max-w-6xl mx-auto px-5">
+      <div className={`relative z-10 ${PAGE_CONTAINER}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-10 text-center md:mb-12"
+        >
+          <div className="text-xs font-mono font-semibold tracking-widest text-electric uppercase">{eyebrow}</div>
+          <h2 className="mx-auto mt-3 max-w-3xl text-3xl font-bold text-navy-deep md:text-4xl">{title}</h2>
+          {subtitle && <p className="mx-auto mt-3 max-w-2xl text-muted-foreground">{subtitle}</p>}
+        </motion.div>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="mb-10"
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+          className={`w-full ${contentClassName}`}
         >
-          <div className="text-xs font-mono font-semibold tracking-widest text-electric uppercase">{eyebrow}</div>
-          <h2 className="mt-3 text-3xl md:text-4xl font-bold text-navy-deep max-w-3xl">{title}</h2>
-          {subtitle && <p className="mt-3 text-muted-foreground max-w-2xl">{subtitle}</p>}
+          {children}
         </motion.div>
-        {children}
       </div>
     </section>
   );
 }
 
+const dividerSnap = { type: "spring" as const, stiffness: 520, damping: 34, mass: 0.55 };
+
 function SectionDivider({
-  variant = "heroToModel",
+  variant = "heroToOrigin",
 }: {
-  variant?: "heroToModel" | "modelToOrigin" | "originToPaths" | "pathsToForm";
+  variant?: "heroToOrigin" | "originToModel" | "modelToPaths" | "pathsToForm";
 }) {
   const styles = {
-    heroToModel: {
-      base: "from-white/72 via-sky-100/52 to-white/82 dark:from-background/78 dark:via-cyan-950/32 dark:to-background/72",
-      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.62_0.2_250/0.34),transparent_64%)]",
-      beam: "from-transparent via-electric/80 to-transparent",
-      shard: "from-electric/0 via-electric/18 to-motca-green/0",
+    heroToOrigin: {
+      label: "Origen",
+      wash: "via-motca-green/[0.08] dark:via-motca-green/[0.05]",
+      primary: "from-motca-green/80 via-motca-green/40 to-transparent",
+      secondary: "from-transparent via-electric/50 to-electric/80",
+      tick: "bg-motca-green",
     },
-    modelToOrigin: {
-      base: "from-white/82 via-emerald-50/62 to-sky-50/76 dark:from-background/72 dark:via-emerald-950/30 dark:to-sky-950/24",
-      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.3),transparent_66%)]",
-      beam: "from-transparent via-motca-green/80 to-transparent",
-      shard: "from-motca-green/0 via-motca-green/18 to-electric/0",
+    originToModel: {
+      label: "Modelo",
+      wash: "via-motca-green/[0.06] dark:via-electric/[0.04]",
+      primary: "from-motca-green/75 via-motca-green/35 to-transparent",
+      secondary: "from-transparent via-electric/55 to-electric/75",
+      tick: "bg-electric",
     },
-    originToPaths: {
-      base: "from-sky-50/76 via-cyan-50/66 to-blue-100/54 dark:from-sky-950/24 dark:via-cyan-950/28 dark:to-background/70",
-      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.62_0.2_250/0.3),transparent_64%)]",
-      beam: "from-transparent via-electric/75 to-transparent",
-      shard: "from-electric/0 via-cyan-300/22 to-electric/0",
+    modelToPaths: {
+      label: "Vías",
+      wash: "via-electric/[0.08] dark:via-electric/[0.05]",
+      primary: "from-electric/80 via-electric/40 to-transparent",
+      secondary: "from-transparent via-cyan-400/45 to-cyan-400/75",
+      tick: "bg-electric",
     },
     pathsToForm: {
-      base: "from-blue-100/54 via-emerald-50/56 to-white/84 dark:from-background/70 dark:via-emerald-950/30 dark:to-background/78",
-      aura: "bg-[radial-gradient(ellipse_at_center,oklch(0.74_0.18_155/0.3),transparent_64%)]",
-      beam: "from-transparent via-motca-green/80 to-transparent",
-      shard: "from-motca-green/0 via-cyan-300/22 to-electric/0",
+      label: "Diagnóstico",
+      wash: "via-motca-green/[0.06] dark:via-motca-green/[0.04]",
+      primary: "from-electric/70 via-electric/35 to-transparent",
+      secondary: "from-transparent via-motca-green/55 to-motca-green/75",
+      tick: "bg-motca-green",
     },
   }[variant];
 
   return (
-    <div
-      className={`relative h-20 overflow-hidden bg-gradient-to-r md:h-28 ${styles.base}`}
-      aria-hidden="true"
-    >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/80 to-transparent" />
-      <motion.div
-        className={`absolute left-1/2 top-1/2 h-24 w-[min(80rem,108vw)] -translate-x-1/2 -translate-y-1/2 blur-2xl md:h-32 ${styles.aura}`}
-        initial={{ opacity: 0.72, scaleX: 0.9 }}
-        whileInView={{ opacity: 1, scaleX: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.9, ease: "easeOut" }}
-      />
-      <motion.div
-        className={`absolute left-1/2 top-1/2 h-[2px] w-[min(78rem,92vw)] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r ${styles.beam} shadow-[0_0_36px_oklch(0.62_0.2_250/0.32)]`}
-        initial={{ scaleX: 0.78, opacity: 0.82 }}
-        whileInView={{ scaleX: 1, opacity: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      />
-      <motion.div
-        className={`absolute left-1/2 top-1/2 h-16 w-[min(70rem,88vw)] -translate-x-1/2 -translate-y-1/2 skew-x-[-18deg] bg-gradient-to-r ${styles.shard} opacity-70 [clip-path:polygon(0_42%,100%_0,92%_58%,7%_100%)]`}
-        initial={{ x: "-52%", opacity: 0.62 }}
-        whileInView={{ x: "-50%", opacity: 0.9 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,oklch(1_0_0/0.52),transparent_42%,oklch(1_0_0/0.45))] dark:bg-[linear-gradient(180deg,oklch(0.08_0.028_255/0.5),transparent_42%,oklch(0.08_0.028_255/0.46))]" />
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-navy/10 to-transparent" />
+    <div className="relative h-10 overflow-hidden md:h-11" aria-hidden="true">
+      <div className={`absolute inset-0 bg-gradient-to-b from-transparent ${styles.wash} to-transparent`} />
+
+      <div className={`${PAGE_CONTAINER} relative flex h-full items-center gap-4`}>
+        <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5">
+          <motion.div
+            className={`h-[2px] w-[72%] bg-gradient-to-r ${styles.primary}`}
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true, margin: "-30px" }}
+            transition={dividerSnap}
+            style={{ originX: 0 }}
+          />
+          <motion.div
+            className={`ml-auto h-[2px] w-[68%] bg-gradient-to-r ${styles.secondary}`}
+            initial={{ scaleX: 0, opacity: 0 }}
+            whileInView={{ scaleX: 1, opacity: 1 }}
+            viewport={{ once: true, margin: "-30px" }}
+            transition={{ ...dividerSnap, delay: 0.04 }}
+            style={{ originX: 1 }}
+          />
+        </div>
+
+        <motion.div
+          className="flex shrink-0 items-center gap-2"
+          initial={{ opacity: 0, x: 8 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, margin: "-30px" }}
+          transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1], delay: 0.07 }}
+        >
+          <motion.span
+            className={`h-3 w-0.5 rounded-full ${styles.tick}`}
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, margin: "-30px" }}
+            transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1], delay: 0.09 }}
+          />
+          <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground/80">
+            {styles.label}
+          </span>
+        </motion.div>
+      </div>
     </div>
   );
 }

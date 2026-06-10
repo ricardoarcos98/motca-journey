@@ -30,12 +30,17 @@ export function LayoutTextFlip({
     return () => window.clearInterval(interval);
   }, [duration, words.length]);
 
+  const currentWord = words[currentIndex];
+  const isMotca = currentWord === "MOTCA";
+
   return (
     <motion.span
-      layout
       aria-live="polite"
       className={cn(
-        "relative inline-grid max-w-full overflow-hidden rounded-lg border border-motca-green/30 bg-white/82 px-3 py-1.5 align-baseline text-[0.64em] leading-none text-motca-green shadow-lg shadow-motca-green/10 ring-1 ring-motca-green/12 backdrop-blur-md dark:bg-card/72 dark:shadow-motca-green/5 sm:text-[0.66em]",
+        "relative inline-grid shrink-0 overflow-hidden rounded-lg px-3 py-1.5 align-middle text-[0.64em] leading-none shadow-lg backdrop-blur-md sm:text-[0.66em]",
+        isMotca
+          ? "border border-electric/45 bg-navy text-motca-green shadow-electric/25 ring-1 ring-electric/30 dark:bg-navy/90"
+          : "border border-motca-green/30 bg-white/82 text-motca-green shadow-motca-green/10 ring-1 ring-motca-green/12 dark:bg-card/72 dark:shadow-motca-green/5",
         className,
       )}
       style={{
@@ -47,14 +52,18 @@ export function LayoutTextFlip({
       </span>
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.span
-          key={words[currentIndex]}
+          key={currentWord}
           initial={{ y: "-85%", filter: "blur(10px)", opacity: 0 }}
           animate={{ y: "0%", filter: "blur(0px)", opacity: 1 }}
           exit={{ y: "85%", filter: "blur(10px)", opacity: 0 }}
           transition={{ duration: 0.48, ease: [0.16, 1, 0.3, 1] }}
-          className={cn("col-start-1 row-start-1 justify-self-center whitespace-nowrap px-1", wordClassName)}
+          className={cn(
+            "col-start-1 row-start-1 justify-self-center whitespace-nowrap px-1",
+            isMotca && "font-display font-bold tracking-[0.18em]",
+            wordClassName,
+          )}
         >
-          {words[currentIndex]}
+          {currentWord}
         </motion.span>
       </AnimatePresence>
     </motion.span>
