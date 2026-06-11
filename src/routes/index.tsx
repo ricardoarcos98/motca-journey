@@ -107,6 +107,25 @@ const whatsappNumber = "573128438532";
 const getWhatsAppHref = (message: string) =>
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
+const founders = [
+  {
+    initials: "LP",
+    name: "Lorena Pitalúa",
+    role: "Co-founder",
+    linkedinUrl: "https://www.linkedin.com/",
+    description:
+      "Lorena conecta personas, tecnología, derecho y toma de decisiones para transformar problemas complejos en estructuras claras y comprensibles. Su visión parte de una idea central: las soluciones más valiosas nacen cuando se integran distintas perspectivas para ayudar a las personas a desenvolverse con mayor autonomía en entornos cambiantes.",
+  },
+  {
+    initials: "RA",
+    name: "Ricardo Arcos",
+    role: "Co-founder",
+    linkedinUrl: "https://www.linkedin.com/",
+    description:
+      "Ricardo conecta ingeniería, datos, inteligencia artificial y estrategia de negocio para convertir retos complejos en soluciones digitales claras, medibles y accionables. Su enfoque combina tecnología, analítica y visión estratégica para ayudar a las personas y organizaciones a adaptarse, aprender y tomar mejores decisiones.",
+  },
+];
+
 const PAGE_CONTAINER = "mx-auto w-full max-w-6xl px-5 sm:px-6";
 
 const fastEase = [0.16, 1, 0.3, 1] as const;
@@ -320,6 +339,20 @@ function Landing() {
       </Section>
 
       <SectionDivider variant="pathsToForm" />
+
+      {/* FOUNDERS */}
+      <Section
+        id="founders"
+        eyebrow="Equipo fundador"
+        title="Quién está detrás de MOTCA"
+        subtitle="MOTCA nace de la unión entre tecnología, estrategia, aprendizaje y visión humana. Detrás de esta iniciativa hay dos founders que comparten una misma convicción: ayudar a las personas a desarrollar capacidades para adaptarse, decidir y avanzar con autonomía en entornos cambiantes."
+        tone="clean"
+        contentClassName="mx-auto max-w-5xl"
+      >
+        <FoundersSection />
+      </Section>
+
+      <SectionDivider variant="foundersToForm" />
 
       {/* FORM */}
       <Section
@@ -542,7 +575,7 @@ const dividerSnap = { type: "spring" as const, stiffness: 520, damping: 34, mass
 function SectionDivider({
   variant = "heroToOrigin",
 }: {
-  variant?: "heroToOrigin" | "originToModel" | "modelToPaths" | "pathsToForm";
+  variant?: "heroToOrigin" | "originToModel" | "modelToPaths" | "pathsToForm" | "foundersToForm";
 }) {
   const styles = {
     heroToOrigin: {
@@ -567,6 +600,13 @@ function SectionDivider({
       tick: "bg-electric",
     },
     pathsToForm: {
+      label: "Founders",
+      wash: "via-electric/[0.05] dark:via-electric/[0.04]",
+      primary: "from-electric/70 via-electric/30 to-transparent",
+      secondary: "from-transparent via-motca-green/45 to-motca-green/65",
+      tick: "bg-electric",
+    },
+    foundersToForm: {
       label: "Diagnóstico",
       wash: "via-motca-green/[0.06] dark:via-motca-green/[0.04]",
       primary: "from-electric/70 via-electric/35 to-transparent",
@@ -619,6 +659,91 @@ function SectionDivider({
         </motion.div>
       </div>
     </div>
+  );
+}
+
+function FoundersSection() {
+  return (
+    <div className="grid gap-4 md:grid-cols-2 md:gap-5">
+      {founders.map((founder, index) => (
+        <FounderCard key={founder.name} founder={founder} index={index} />
+      ))}
+    </div>
+  );
+}
+
+function FounderCard({
+  founder,
+  index,
+}: {
+  founder: (typeof founders)[number];
+  index: number;
+}) {
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.46, delay: index * 0.06, ease: fastEase }}
+      whileHover={{ y: -6 }}
+      className="group relative flex min-h-[25rem] flex-col overflow-hidden rounded-2xl border border-border/80 bg-card/88 p-6 shadow-xl shadow-navy/6 backdrop-blur-xl transition-colors duration-300 hover:border-electric/35 dark:border-white/10 dark:bg-card/72 dark:shadow-black/25 sm:p-7"
+    >
+      <GlowingEffect spread={46} glow disabled={false} proximity={115} inactiveZone={0.01} borderWidth={1.2} />
+      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-motca-green/55 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+      <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-electric/10 blur-3xl transition-opacity duration-300 group-hover:opacity-80 dark:bg-electric/8" />
+      <div className="absolute -bottom-24 left-6 h-48 w-48 rounded-full bg-motca-green/10 blur-3xl dark:bg-motca-green/8" />
+
+      <div className="relative z-10 flex items-start justify-between gap-5">
+        <div
+          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-electric/20 bg-[radial-gradient(circle_at_30%_20%,oklch(0.74_0.18_155/0.32),transparent_42%),linear-gradient(135deg,oklch(0.18_0.08_260),oklch(0.1_0.04_255))] font-display text-xl font-bold text-white shadow-lg shadow-electric/12"
+          role="img"
+          aria-label={`Imagen pendiente de ${founder.name}`}
+        >
+          {founder.initials}
+        </div>
+
+        <a
+          href={founder.linkedinUrl}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={`LinkedIn de ${founder.name}`}
+          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-border bg-background/80 text-navy-deep shadow-sm shadow-navy/5 transition-all hover:-translate-y-0.5 hover:border-electric hover:text-electric hover:shadow-electric/12 dark:bg-background/50 dark:text-white"
+        >
+          <LinkedInIcon className="h-4 w-4" />
+        </a>
+      </div>
+
+      <div className="relative z-10 mt-7 flex flex-1 flex-col">
+        <div>
+          <h3 className="font-display text-2xl font-bold leading-tight text-navy-deep dark:text-white">
+            {founder.name}
+          </h3>
+          <p className="mt-1 text-sm font-semibold text-motca-green">{founder.role}</p>
+        </div>
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+          {founder.description}
+        </p>
+      </div>
+    </motion.article>
+  );
+}
+
+function LinkedInIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6Z" />
+      <rect width="4" height="12" x="2" y="9" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
   );
 }
 
