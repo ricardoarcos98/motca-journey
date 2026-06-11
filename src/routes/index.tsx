@@ -119,12 +119,6 @@ const founders = [
     linkedinUrl: "https://www.linkedin.com/",
     description:
       "Lorena conecta personas, tecnología, derecho y toma de decisiones para transformar problemas complejos en estructuras claras y comprensibles. Su visión parte de una idea central: las soluciones más valiosas nacen cuando se integran distintas perspectivas para ayudar a las personas a desenvolverse con mayor autonomía en entornos cambiantes.",
-    studies: [
-      "Magíster en Gerencia de la Transformación Digital y Analítica de Negocios",
-      "Especialista en Derecho Informático y Nuevas Tecnologías",
-      "Especialista en Ciberseguridad",
-      "Abogada",
-    ],
   },
   {
     initials: "RA",
@@ -135,11 +129,6 @@ const founders = [
     linkedinUrl: "https://www.linkedin.com/",
     description:
       "Ricardo conecta ingeniería, datos, inteligencia artificial y estrategia de negocio para convertir retos complejos en soluciones digitales claras, medibles y accionables. Su enfoque combina tecnología, analítica y visión estratégica para ayudar a las personas y organizaciones a adaptarse, aprender y tomar mejores decisiones.",
-    studies: [
-      "Magíster en Gerencia de la Transformación Digital y Analítica de Negocios",
-      "Especialista en alta gerencia",
-      "Ingeniero industrial",
-    ],
   },
 ];
 
@@ -747,22 +736,9 @@ function FounderCard({
           </h3>
           <p className="mt-1 text-sm font-semibold text-motca-green">{founder.role}</p>
         </div>
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground md:min-h-[15.25rem] lg:min-h-[12.75rem] xl:min-h-[11.25rem]">
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
           {founder.description}
         </p>
-        <div className="mt-6 border-t border-border/70 pt-5 dark:border-white/10">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-electric">
-            Estudios
-          </p>
-          <ul className="mt-3 space-y-2.5">
-            {founder.studies.map((study) => (
-              <li key={study} className="flex gap-2.5 text-sm leading-relaxed text-navy-deep/78 dark:text-white/72">
-                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-motca-green shadow-sm shadow-motca-green/30" />
-                <span>{study}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
       </div>
     </motion.article>
   );
