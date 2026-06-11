@@ -107,22 +107,39 @@ const whatsappNumber = "573128438532";
 const getWhatsAppHref = (message: string) =>
   `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 
+const assetPath = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, "")}`;
+
 const founders = [
   {
     initials: "LP",
     name: "Lorena Pitalúa",
-    role: "Co-founder",
+    role: "Founder",
+    imageSrc: assetPath("founders/lorena-headshot.jpg"),
+    avatarClassName: "scale-[1.06] translate-y-1",
     linkedinUrl: "https://www.linkedin.com/",
     description:
       "Lorena conecta personas, tecnología, derecho y toma de decisiones para transformar problemas complejos en estructuras claras y comprensibles. Su visión parte de una idea central: las soluciones más valiosas nacen cuando se integran distintas perspectivas para ayudar a las personas a desenvolverse con mayor autonomía en entornos cambiantes.",
+    studies: [
+      "Magíster en Gerencia de la Transformación Digital y Analítica de Negocios",
+      "Especialista en Derecho Informático y Nuevas Tecnologías",
+      "Especialista en Ciberseguridad",
+      "Abogada",
+    ],
   },
   {
     initials: "RA",
     name: "Ricardo Arcos",
     role: "Co-founder",
+    imageSrc: assetPath("founders/ricardo-headshot-v2.jpg"),
+    avatarClassName: "scale-[1.08]",
     linkedinUrl: "https://www.linkedin.com/",
     description:
       "Ricardo conecta ingeniería, datos, inteligencia artificial y estrategia de negocio para convertir retos complejos en soluciones digitales claras, medibles y accionables. Su enfoque combina tecnología, analítica y visión estratégica para ayudar a las personas y organizaciones a adaptarse, aprender y tomar mejores decisiones.",
+    studies: [
+      "Magíster en Gerencia de la Transformación Digital y Analítica de Negocios",
+      "Especialista en alta gerencia",
+      "Ingeniero industrial",
+    ],
   },
 ];
 
@@ -685,21 +702,31 @@ function FounderCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{ duration: 0.46, delay: index * 0.06, ease: fastEase }}
-      whileHover={{ y: -6 }}
-      className="group relative flex min-h-[25rem] flex-col overflow-hidden rounded-2xl border border-border/80 bg-card/88 p-6 shadow-xl shadow-navy/6 backdrop-blur-xl transition-colors duration-300 hover:border-electric/35 dark:border-white/10 dark:bg-card/72 dark:shadow-black/25 sm:p-7"
+      whileHover={{ y: -3, scale: 1.006, transition: { duration: 0.12, ease: fastEase } }}
+      className="group relative flex min-h-[28rem] flex-col overflow-hidden rounded-2xl border border-border/80 bg-card/88 p-6 shadow-xl shadow-navy/6 backdrop-blur-xl transition-all duration-150 hover:border-electric/35 hover:shadow-2xl hover:shadow-electric/10 dark:border-white/10 dark:bg-card/72 dark:shadow-black/25 sm:p-7"
     >
       <GlowingEffect spread={46} glow disabled={false} proximity={115} inactiveZone={0.01} borderWidth={1.2} />
-      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-motca-green/55 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-      <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-electric/10 blur-3xl transition-opacity duration-300 group-hover:opacity-80 dark:bg-electric/8" />
+      <div className="absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-motca-green/55 to-transparent opacity-0 transition-opacity duration-150 group-hover:opacity-100" />
+      <div className="absolute -right-20 -top-20 h-48 w-48 rounded-full bg-electric/10 opacity-70 blur-3xl transition-opacity duration-150 group-hover:opacity-90 dark:bg-electric/8" />
       <div className="absolute -bottom-24 left-6 h-48 w-48 rounded-full bg-motca-green/10 blur-3xl dark:bg-motca-green/8" />
 
       <div className="relative z-10 flex items-start justify-between gap-5">
         <div
-          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-electric/20 bg-[radial-gradient(circle_at_30%_20%,oklch(0.74_0.18_155/0.32),transparent_42%),linear-gradient(135deg,oklch(0.18_0.08_260),oklch(0.1_0.04_255))] font-display text-xl font-bold text-white shadow-lg shadow-electric/12"
-          role="img"
-          aria-label={`Imagen pendiente de ${founder.name}`}
+          className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-transparent bg-transparent font-display text-xl font-bold text-white shadow-sm shadow-navy/5 transition-transform duration-150 group-hover:scale-[1.015]"
         >
-          {founder.initials}
+          {founder.imageSrc ? (
+            <img
+              src={founder.imageSrc}
+              alt={founder.name}
+              className={`h-full w-full object-cover transition-transform duration-150 ${founder.avatarClassName}`}
+              loading="lazy"
+              decoding="async"
+            />
+          ) : (
+            <span role="img" aria-label={`Imagen pendiente de ${founder.name}`}>
+              {founder.initials}
+            </span>
+          )}
         </div>
 
         <a
@@ -720,9 +747,22 @@ function FounderCard({
           </h3>
           <p className="mt-1 text-sm font-semibold text-motca-green">{founder.role}</p>
         </div>
-        <p className="mt-6 text-base leading-relaxed text-muted-foreground">
+        <p className="mt-6 text-base leading-relaxed text-muted-foreground md:min-h-[15.25rem] lg:min-h-[12.75rem] xl:min-h-[11.25rem]">
           {founder.description}
         </p>
+        <div className="mt-6 border-t border-border/70 pt-5 dark:border-white/10">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-electric">
+            Estudios
+          </p>
+          <ul className="mt-3 space-y-2.5">
+            {founder.studies.map((study) => (
+              <li key={study} className="flex gap-2.5 text-sm leading-relaxed text-navy-deep/78 dark:text-white/72">
+                <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-motca-green shadow-sm shadow-motca-green/30" />
+                <span>{study}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </motion.article>
   );
@@ -1036,7 +1076,7 @@ function DiagnosticForm() {
             whileTap={{ scale: submitting ? 1 : 0.98 }}
             type="submit"
             disabled={submitting}
-            className="relative w-full overflow-hidden rounded-lg bg-navy px-7 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-navy/15 transition-colors hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60 md:w-auto"
+            className="relative w-full overflow-hidden rounded-lg bg-navy px-7 py-3.5 font-semibold text-primary-foreground shadow-lg shadow-navy/15 transition-colors hover:bg-navy-deep disabled:cursor-not-allowed disabled:opacity-60"
           >
             <GlowingEffect spread={30} glow disabled={false} proximity={72} inactiveZone={0.01} borderWidth={1.2} />
             {submitting ? "Enviando…" : "Enviar diagnóstico"}
